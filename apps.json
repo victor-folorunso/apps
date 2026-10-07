@@ -1,0 +1,19 @@
+{
+  "studio": "wonderperk",
+  "contact": "victorfolorunsoofficial@gmail.com",
+  "testers_group": "wonderperk-testers",
+  "apps": [
+    {
+      "id": "linking",
+      "name": "LINKING",
+      "package": "game.linking",
+      "status": "testing",
+      "tagline": "Line up. Clash. Break through.",
+      "about": "A two-player strategy board game of diagonal lines, clashes and breakthroughs. Play the computer, a friend on one phone, or a friend's phone nearby over Bluetooth.",
+      "icon": "linking/icon.png",
+      "accent": "#e0a36a",
+      "privacy": "privacy/linking.html",
+      "privacy_updated": "29 September 2026"
+    }
+  ]
+}
