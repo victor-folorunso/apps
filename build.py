@@ -4,6 +4,8 @@
   <id>/index.html         an app's page: join the test and install (testing),
                           or a Google Play button (live)
   <id>/privacy/index.html the app's privacy policy (from privacy/<id>.html)
+  <id>/delete-account/    how to delete an account (apps with accounts only:
+                          "delete_account": "delete-account/<id>.html")
 
 Add an app: put its icon in <id>/icon.png, its privacy text in
 privacy/<id>.html, an entry in apps.json, then run `python build.py` and
@@ -93,7 +95,7 @@ public release.</p>"""
 <p>{html.escape(app['about'])}</p>
 {how}
 <h2>More</h2>
-<p><a href="privacy/">Privacy policy</a> &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
+<p><a href="privacy/">Privacy policy</a>{' &middot; <a href="delete-account/">Delete your account</a>' if app.get('delete_account') else ''} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
     return page(f"{app['name']} by wonderperk", app["tagline"], body, 1, app.get("accent", "#e0a36a"))
 
 
@@ -104,6 +106,14 @@ def privacy_page(app):
 {text}"""
     return page(f"{app['name']} Privacy Policy", f"Privacy policy for {app['name']}.", body, 2,
                 app.get("accent", "#e0a36a"))
+
+
+def delete_account_page(app):
+    text = (ROOT / app["delete_account"]).read_text(encoding="utf-8")
+    body = f"""<h1>{html.escape(app['name'])}: Delete your account</h1>
+{text}"""
+    return page(f"Delete your {app['name']} account", f"How to delete your {app['name']} account and data.",
+                body, 2, app.get("accent", "#e0a36a"))
 
 
 def index_page(data):
@@ -128,6 +138,9 @@ def main():
         (folder / "privacy").mkdir(parents=True, exist_ok=True)
         (folder / "index.html").write_text(app_page(app, data), encoding="utf-8")
         (folder / "privacy" / "index.html").write_text(privacy_page(app), encoding="utf-8")
+        if app.get("delete_account"):
+            (folder / "delete-account").mkdir(exist_ok=True)
+            (folder / "delete-account" / "index.html").write_text(delete_account_page(app), encoding="utf-8")
         print(f"built {app['id']}/ ({app['status']})")
     (ROOT / ".nojekyll").write_text("", encoding="utf-8")
 

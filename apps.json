@@ -14,6 +14,19 @@
       "accent": "#e0a36a",
       "privacy": "privacy/linking.html",
       "privacy_updated": "29 September 2026"
+    },
+    {
+      "id": "contactsync",
+      "name": "ContactSync",
+      "package": "com.wonderperk.contactsync",
+      "status": "testing",
+      "tagline": "Meet people in your niche.",
+      "about": "Pick tags that describe you. ContactSync matches you with people who share them and adds you to each other's phone contacts, always both ways. Your address book never leaves your phone. 18+.",
+      "icon": "contactsync/icon.png",
+      "accent": "#7d9bff",
+      "privacy": "privacy/contactsync.html",
+      "privacy_updated": "8 October 2026",
+      "delete_account": "delete-account/contactsync.html"
     }
   ]
 }
