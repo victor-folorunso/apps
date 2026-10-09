@@ -4,10 +4,9 @@
   <id>/index.html         an app's page: join the test and install (testing),
                           or a Google Play button (live)
   <id>/privacy/index.html the app's privacy policy (from privacy/<id>.html)
-  <id>/delete-account/    how to delete an account (apps with accounts only:
-                          "delete_account": "delete-account/<id>.html")
-  <id>/child-safety/      child-safety (CSAE) standards, required by Play for
-                          social apps: "child_safety": "child-safety/<id>.html"
+  <id>/<slug>/            extra pages for apps with accounts, each optional:
+                          "terms", "delete_account", "child_safety" (see
+                          EXTRA_PAGES), e.g. "terms": "terms/<id>.html"
 
 Add an app: put its icon in <id>/icon.png, its privacy text in
 privacy/<id>.html, an entry in apps.json, then run `python build.py` and
@@ -97,7 +96,7 @@ public release.</p>"""
 <p>{html.escape(app['about'])}</p>
 {how}
 <h2>More</h2>
-<p><a href="privacy/">Privacy policy</a>{' &middot; <a href="delete-account/">Delete your account</a>' if app.get('delete_account') else ''}{' &middot; <a href="child-safety/">Child safety</a>' if app.get('child_safety') else ''} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
+<p><a href="privacy/">Privacy policy</a>{extra_links(app)} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
     return page(f"{app['name']} by wonderperk", app["tagline"], body, 1, app.get("accent", "#e0a36a"))
 
 
@@ -110,21 +109,30 @@ def privacy_page(app):
                 app.get("accent", "#e0a36a"))
 
 
-def delete_account_page(app):
-    text = (ROOT / app["delete_account"]).read_text(encoding="utf-8")
-    body = f"""<h1>{html.escape(app['name'])}: Delete your account</h1>
-{text}"""
-    return page(f"Delete your {app['name']} account", f"How to delete your {app['name']} account and data.",
-                body, 2, app.get("accent", "#e0a36a"))
+# Optional extra pages: apps.json key -> (folder under <id>/, link label, page title).
+# Each key's value is the HTML body file; "<key>_updated" sets its date
+# (defaults to the privacy policy's).
+EXTRA_PAGES = {
+    "terms": ("terms", "Terms of service", "Terms of Service"),
+    "delete_account": ("delete-account", "Delete your account", "Delete your account"),
+    "child_safety": ("child-safety", "Child safety", "Child Safety Standards"),
+}
 
 
-def child_safety_page(app):
-    text = (ROOT / app["child_safety"]).read_text(encoding="utf-8")
-    body = f"""<h1>{html.escape(app['name'])}: Child safety standards</h1>
-<p class="dim">Last updated {html.escape(app.get('child_safety_updated', app['privacy_updated']))}</p>
+def extra_page(app, key):
+    _, _, title = EXTRA_PAGES[key]
+    text = (ROOT / app[key]).read_text(encoding="utf-8")
+    updated = app.get(f"{key}_updated", app["privacy_updated"])
+    body = f"""<h1>{html.escape(app['name'])}: {html.escape(title)}</h1>
+<p class="dim">Last updated {html.escape(updated)}</p>
 {text}"""
-    return page(f"{app['name']} Child Safety Standards", f"{app['name']} standards against child sexual abuse and exploitation.",
-                body, 2, app.get("accent", "#e0a36a"))
+    return page(f"{app['name']} {title}", f"{title} for {app['name']}.", body, 2,
+                app.get("accent", "#e0a36a"))
+
+
+def extra_links(app):
+    return "".join(f' &middot; <a href="{folder}/">{label}</a>'
+                   for key, (folder, label, _) in EXTRA_PAGES.items() if app.get(key))
 
 
 def index_page(data):
@@ -149,12 +157,10 @@ def main():
         (folder / "privacy").mkdir(parents=True, exist_ok=True)
         (folder / "index.html").write_text(app_page(app, data), encoding="utf-8")
         (folder / "privacy" / "index.html").write_text(privacy_page(app), encoding="utf-8")
-        if app.get("delete_account"):
-            (folder / "delete-account").mkdir(exist_ok=True)
-            (folder / "delete-account" / "index.html").write_text(delete_account_page(app), encoding="utf-8")
-        if app.get("child_safety"):
-            (folder / "child-safety").mkdir(exist_ok=True)
-            (folder / "child-safety" / "index.html").write_text(child_safety_page(app), encoding="utf-8")
+        for key, (slug, _, _) in EXTRA_PAGES.items():
+            if app.get(key):
+                (folder / slug).mkdir(exist_ok=True)
+                (folder / slug / "index.html").write_text(extra_page(app, key), encoding="utf-8")
         print(f"built {app['id']}/ ({app['status']})")
     (ROOT / ".nojekyll").write_text("", encoding="utf-8")
 

@@ -28,7 +28,9 @@
       "privacy_updated": "8 October 2026",
       "delete_account": "delete-account/contactsync.html",
       "child_safety": "child-safety/contactsync.html",
-      "child_safety_updated": "9 October 2026"
+      "child_safety_updated": "9 October 2026",
+      "terms": "terms/contactsync.html",
+      "terms_updated": "9 October 2026"
     },
     {
       "id": "bitnook",
