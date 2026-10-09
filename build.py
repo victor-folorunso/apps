@@ -6,6 +6,8 @@
   <id>/privacy/index.html the app's privacy policy (from privacy/<id>.html)
   <id>/delete-account/    how to delete an account (apps with accounts only:
                           "delete_account": "delete-account/<id>.html")
+  <id>/child-safety/      child-safety (CSAE) standards, required by Play for
+                          social apps: "child_safety": "child-safety/<id>.html"
 
 Add an app: put its icon in <id>/icon.png, its privacy text in
 privacy/<id>.html, an entry in apps.json, then run `python build.py` and
@@ -95,7 +97,7 @@ public release.</p>"""
 <p>{html.escape(app['about'])}</p>
 {how}
 <h2>More</h2>
-<p><a href="privacy/">Privacy policy</a>{' &middot; <a href="delete-account/">Delete your account</a>' if app.get('delete_account') else ''} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
+<p><a href="privacy/">Privacy policy</a>{' &middot; <a href="delete-account/">Delete your account</a>' if app.get('delete_account') else ''}{' &middot; <a href="child-safety/">Child safety</a>' if app.get('child_safety') else ''} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
     return page(f"{app['name']} by wonderperk", app["tagline"], body, 1, app.get("accent", "#e0a36a"))
 
 
@@ -113,6 +115,15 @@ def delete_account_page(app):
     body = f"""<h1>{html.escape(app['name'])}: Delete your account</h1>
 {text}"""
     return page(f"Delete your {app['name']} account", f"How to delete your {app['name']} account and data.",
+                body, 2, app.get("accent", "#e0a36a"))
+
+
+def child_safety_page(app):
+    text = (ROOT / app["child_safety"]).read_text(encoding="utf-8")
+    body = f"""<h1>{html.escape(app['name'])}: Child safety standards</h1>
+<p class="dim">Last updated {html.escape(app.get('child_safety_updated', app['privacy_updated']))}</p>
+{text}"""
+    return page(f"{app['name']} Child Safety Standards", f"{app['name']} standards against child sexual abuse and exploitation.",
                 body, 2, app.get("accent", "#e0a36a"))
 
 
@@ -141,6 +152,9 @@ def main():
         if app.get("delete_account"):
             (folder / "delete-account").mkdir(exist_ok=True)
             (folder / "delete-account" / "index.html").write_text(delete_account_page(app), encoding="utf-8")
+        if app.get("child_safety"):
+            (folder / "child-safety").mkdir(exist_ok=True)
+            (folder / "child-safety" / "index.html").write_text(child_safety_page(app), encoding="utf-8")
         print(f"built {app['id']}/ ({app['status']})")
     (ROOT / ".nojekyll").write_text("", encoding="utf-8")
 
