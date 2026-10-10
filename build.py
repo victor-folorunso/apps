@@ -94,6 +94,14 @@ browser first, or joining the testers won't work.
 </script>"""
 
 
+# Between steps 1 and 2: Google needs a few minutes to add a new group member
+# to the test. Opt in per app: "wait_tip": true.
+WAIT_TIP = """
+<div class="short" style="border-style:dashed;text-align:center">&#9203; <b>Wait about 5&ndash;10 minutes</b>
+before step 2. Google takes a little while to add you to the testers. If step 2
+says you&#39;re not a tester yet, wait a bit longer and try again.</div>"""
+
+
 def app_page(app, data):
     play = f"https://play.google.com/store/apps/details?id={app['package']}"
     name = html.escape(app["name"])
@@ -104,7 +112,7 @@ def app_page(app, data):
 <p>{name} is in testing on Google Play. Two taps on your Android phone, with
 the same Google account as your Play Store:</p>
 <div class="step"><span class="n">1.</span> Join the testers (once; it covers every wonderperk app).
-<a class="button" href="{group}">Join testers</a></div>
+<a class="button" href="{group}">Join testers</a></div>{WAIT_TIP if app.get('wait_tip') else ''}
 <div class="step"><span class="n">2.</span> Tap <b>Become a tester</b>, then <b>Download it on Google Play</b>.
 <a class="button" href="{test}">Get {name}</a></div>
 <p class="dim">Just joined? Step 2 can take a few minutes to recognise you.
