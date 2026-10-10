@@ -72,6 +72,28 @@ def page(title, description, body, depth, accent="#e0a36a"):
 """
 
 
+# Shown only inside TikTok / Instagram / Facebook's in-app browsers, where
+# people aren't signed in to Google, so "Join testers" asks for a Google
+# password and the Play link may not open. Opt in per app: "inapp_tip": true.
+INAPP_TIP = r"""
+<div id="inapp" class="step" style="display:none;border-color:var(--accent)">
+<b>Opened from TikTok, Instagram or Facebook?</b> Open this page in your
+browser first, or joining the testers won't work.
+<a class="button" id="open-browser" href="#">Open in browser</a>
+<p class="dim">Button not working? Tap <b>&#8942;</b> or <b>&hellip;</b> at the top right and choose
+<b>Open in browser</b>.</p></div>
+<script>
+(function () {
+  var ua = navigator.userAgent || "";
+  if (!/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|FB_IAB/i.test(ua)) return;
+  document.getElementById("inapp").style.display = "block";
+  var url = location.href.replace(/^https?:\/\//, "");
+  // No package: Android hands it to the person's default browser.
+  document.getElementById("open-browser").href = "intent://" + url + "#Intent;scheme=https;end";
+})();
+</script>"""
+
+
 def app_page(app, data):
     play = f"https://play.google.com/store/apps/details?id={app['package']}"
     name = html.escape(app["name"])
@@ -91,7 +113,7 @@ public release.</p>"""
     else:
         how = f'<a class="button" href="{play}">Get it on Google Play</a>'
     body = f"""
-<div class="hero"><img src="icon.png" alt="">
+{INAPP_TIP + chr(10) if app.get('inapp_tip') else ''}<div class="hero"><img src="icon.png" alt="">
 <div><h1>{name}</h1><div class="dim">{html.escape(app['tagline'])}</div></div></div>
 <p>{html.escape(app['about'])}</p>
 {how}

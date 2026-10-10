@@ -30,7 +30,8 @@
       "child_safety": "child-safety/contactsync.html",
       "child_safety_updated": "9 October 2026",
       "terms": "terms/contactsync.html",
-      "terms_updated": "9 October 2026"
+      "terms_updated": "9 October 2026",
+      "inapp_tip": true
     },
     {
       "id": "bitnook",
