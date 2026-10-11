@@ -84,7 +84,10 @@ public release.</p>
   var platform = /android/i.test(ua) ? "android" : /iphone|ipad|ipod/i.test(ua) ? "ios" : "other";
   var browser = /musical_ly|BytedanceWebview|TikTok/i.test(ua) ? "tiktok"
     : /Instagram/i.test(ua) ? "instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "facebook" : "browser";
-  var source = (new URLSearchParams(location.search).get("src") || "").slice(0, 20);
+  // ?src= wins; otherwise the click IDs ad platforms add to ad links.
+  var q = new URLSearchParams(location.search);
+  var source = (q.get("src") || (q.get("ttclid") ? "tiktok_ad" : (q.get("gclid") || q.get("gbraid") || q.get("wbraid")) ? "google_ad"
+    : q.get("fbclid") ? "facebook" : "")).slice(0, 20);
   function send(event) {
     var body = JSON.stringify({ app: app, event: event, platform: platform, browser: browser, source: source });
     try { if (navigator.sendBeacon(url, new Blob([body], { type: "text/plain" }))) return; } catch (e) {}
