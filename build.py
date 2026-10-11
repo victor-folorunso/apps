@@ -79,7 +79,7 @@ INAPP_TIP = r"""
 <div id="inapp" class="step" style="display:none;border-color:var(--accent)">
 <b>Opened from TikTok, Instagram or Facebook?</b> Open this page in your
 browser first, or joining the testers won't work.
-<a class="button" id="open-browser" href="#">Open in browser</a>
+<a class="button" id="open-browser" href="#" data-track="open_browser">Open in browser</a>
 <p class="dim">Button not working? Tap <b>&#8942;</b> or <b>&hellip;</b> at the top right and choose
 <b>Open in browser</b>.</p></div>
 <script>
@@ -102,6 +102,44 @@ before step 2. Google takes a little while to add you to the testers. If step 2
 says you&#39;re not a tester yet, wait a bit longer and try again.</div>"""
 
 
+# Anonymous step counts (page opened, "Join testers", "Get <app>", "Open in
+# browser") sent to the app's own backend. No cookies or personal data: only
+# the step, Android/iPhone/other, which in-app browser if any, and ?src= from
+# the link. Opt in per app: "track_url": "<endpoint>". Buttons carry
+# data-track names; the endpoint must accept them (ContactSync: Supabase
+# function `track`, table site_events).
+TRACK = r"""
+<script>
+(function () {
+  var url = "%(url)s", app = "%(app)s";
+  var ua = navigator.userAgent || "";
+  var platform = /android/i.test(ua) ? "android" : /iphone|ipad|ipod/i.test(ua) ? "ios" : "other";
+  var browser = /musical_ly|BytedanceWebview|TikTok/i.test(ua) ? "tiktok"
+    : /Instagram/i.test(ua) ? "instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "facebook" : "browser";
+  var source = (new URLSearchParams(location.search).get("src") || "").slice(0, 20);
+  function send(event) {
+    var body = JSON.stringify({ app: app, event: event, platform: platform, browser: browser, source: source });
+    try { if (navigator.sendBeacon(url, new Blob([body], { type: "text/plain" }))) return; } catch (e) {}
+    fetch(url, { method: "POST", body: body, keepalive: true, headers: { "Content-Type": "text/plain" } });
+  }
+  send("page_view");
+  document.addEventListener("click", function (e) {
+    var el = e.target.closest && e.target.closest("[data-track]");
+    if (el) send(el.getAttribute("data-track"));
+  });
+})();
+</script>"""
+
+
+def promo_box(promo):
+    """Bonus reminder: {"code": "...", "text": "..."} in apps.json."""
+    return f"""
+<div class="short" style="text-align:center">&#127873; {html.escape(promo['text'])}
+<div style="margin:12px auto 4px;display:inline-block;padding:10px 22px;border:2px dashed var(--accent);
+border-radius:12px;font-size:1.5rem;font-weight:800;letter-spacing:.06em">{html.escape(promo['code'])}</div>
+<div class="dim">{html.escape(promo.get('where', ''))}</div></div>"""
+
+
 def app_page(app, data):
     play = f"https://play.google.com/store/apps/details?id={app['package']}"
     name = html.escape(app["name"])
@@ -112,9 +150,9 @@ def app_page(app, data):
 <p>{name} is in testing on Google Play. Two taps on your Android phone, with
 the same Google account as your Play Store:</p>
 <div class="step"><span class="n">1.</span> Join the testers (once; it covers every wonderperk app).
-<a class="button" href="{group}">Join testers</a></div>{WAIT_TIP if app.get('wait_tip') else ''}
+<a class="button" href="{group}"{' data-track="join"' if app.get('track_url') else ''}>Join testers</a></div>{WAIT_TIP if app.get('wait_tip') else ''}
 <div class="step"><span class="n">2.</span> Tap <b>Become a tester</b>, then <b>Download it on Google Play</b>.
-<a class="button" href="{test}">Get {name}</a></div>
+<a class="button" href="{test}"{' data-track="get"' if app.get('track_url') else ''}>Get {name}</a></div>
 <p class="dim">Just joined? Step 2 can take a few minutes to recognise you.
 Please keep the app installed for two weeks: Google counts testers before the
 public release.</p>"""
@@ -124,9 +162,11 @@ public release.</p>"""
 {INAPP_TIP + chr(10) if app.get('inapp_tip') else ''}<div class="hero"><img src="icon.png" alt="">
 <div><h1>{name}</h1><div class="dim">{html.escape(app['tagline'])}</div></div></div>
 <p>{html.escape(app['about'])}</p>
-{how}
+{promo_box(app['promo']) + chr(10) if app.get('promo') else ''}{how}
 <h2>More</h2>
 <p><a href="privacy/">Privacy policy</a>{extra_links(app)} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
+    if app.get("track_url"):
+        body += TRACK % {"url": app["track_url"], "app": app["id"]}
     return page(f"{app['name']} by wonderperk", app["tagline"], body, 1, app.get("accent", "#e0a36a"))
 
 
