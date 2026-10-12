@@ -13,7 +13,9 @@
       "icon": "linking/icon.png",
       "accent": "#e0a36a",
       "privacy": "privacy/linking.html",
-      "privacy_updated": "29 September 2026"
+      "privacy_updated": "29 September 2026",
+      "inapp_tip": true,
+      "wait_tip": true
     },
     {
       "id": "contactsync",
