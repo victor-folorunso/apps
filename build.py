@@ -76,20 +76,37 @@ def page(title, description, body, depth, accent="#e0a36a"):
 # people aren't signed in to Google, so "Join testers" asks for a Google
 # password and the Play link may not open. Opt in per app: "inapp_tip": true.
 INAPP_TIP = r"""
-<div id="inapp" class="step" style="display:none;border-color:var(--accent)">
-<b>Opened from TikTok, Instagram or Facebook?</b> Open this page in your
-browser first, or joining the testers won't work.
-<a class="button" id="open-browser" href="#" data-track="open_browser">Open in browser</a>
-<p class="dim">Button not working? Tap <b>&#8942;</b> or <b>&hellip;</b> at the top right and choose
-<b>Open in browser</b>.</p></div>
+<div id="inapp" style="display:none;margin:0 0 18px;padding:18px;border-radius:16px;background:var(--accent);color:#fff;text-align:center">
+<div style="font-size:1.15rem;font-weight:800;margin-bottom:6px">First: open this page in your browser</div>
+<div style="opacity:.9">You opened it inside TikTok, Instagram or Facebook, where joining the testers
+doesn&#39;t work.</div>
+<a class="button" id="open-browser" href="#" data-track="open_browser"
+style="background:#fff;color:var(--accent);font-size:1.1rem;margin-top:14px">Open in browser</a>
+<div style="opacity:.85;font-size:.9rem;margin-top:10px">Not working? Tap <b>&#8942;</b> or <b>&hellip;</b>
+at the top right, then <b>Open in browser</b>.</div></div>
 <script>
 (function () {
   var ua = navigator.userAgent || "";
   if (!/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|FB_IAB/i.test(ua)) return;
   document.getElementById("inapp").style.display = "block";
-  var url = location.href.replace(/^https?:\/\//, "");
+  // Keep where the visit came from when it moves to the real browser: the
+  // ad's click id (ttclid, fbclid) can get dropped on the way, ?src= is ours.
+  var q = new URLSearchParams(location.search);
+  if (!q.get("src")) {
+    q.set("src", q.get("ttclid") ? "tiktok_ad" : q.get("fbclid") ? "facebook_ad"
+      : /Instagram/i.test(ua) ? "instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "facebook" : "tiktok");
+    // Also covers the in-app browser's own "Open in browser" menu, which uses the current URL.
+    try { history.replaceState(null, "", location.pathname + "?" + q.toString() + location.hash); } catch (e) {}
+  }
   // No package: Android hands it to the person's default browser.
-  document.getElementById("open-browser").href = "intent://" + url + "#Intent;scheme=https;end";
+  var toBrowser = function (href) { return "intent://" + href.replace(/^https?:\/\//, "") + "#Intent;scheme=https;end"; };
+  document.getElementById("open-browser").href = toBrowser(location.href);
+  // The step buttons too: Google sign-in only works in the real browser.
+  // (They come later in the page, so wait for it to load.)
+  if (/android/i.test(ua)) document.addEventListener("DOMContentLoaded", function () {
+    var buttons = document.querySelectorAll("a.button[data-track='join'], a.button[data-track='get']");
+    for (var i = 0; i < buttons.length; i++) buttons[i].href = toBrowser(buttons[i].href);
+  });
 })();
 </script>"""
 
