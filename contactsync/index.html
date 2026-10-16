@@ -46,11 +46,35 @@ doesn&#39;t work.</div>
 style="background:#fff;color:var(--accent);font-size:1.1rem;margin-top:14px">Open in browser</a>
 <div style="opacity:.85;font-size:.9rem;margin-top:10px">Not working? Tap <b>&#8942;</b> or <b>&hellip;</b>
 at the top right, then <b>Open in browser</b>.</div></div>
+<!-- Plain fallback for everyone: the banner above relies on recognising the
+     in-app browser, which can fail. Hidden only when the banner shows. -->
+<div id="inapp-help" class="short" style="margin:0 0 18px">
+<b>Came here from TikTok, Instagram or Facebook?</b> Open this page in your phone&#39;s browser
+first, or joining won&#39;t work:
+<ol style="margin:8px 0 0;padding-left:22px">
+<li>Tap <b>&hellip;</b> or <b>&#8942;</b> at the <b>top right</b> of your screen</li>
+<li>Tap <b>Open in browser</b></li></ol>
+<div style="margin-top:10px">Can&#39;t find it? Copy this link and paste it into your browser:<br>
+<b style="word-break:break-all">victor-folorunso.github.io/apps/contactsync</b></div>
+<a class="button secondary" id="copy-link" href="#" data-track="copy_link">Copy link</a></div>
+<script>
+(function () {
+  var btn = document.getElementById("copy-link");
+  btn.addEventListener("click", function (e) {
+    e.preventDefault();
+    var url = location.href;
+    var done = function () { btn.textContent = "Copied! Now paste it in your browser"; };
+    var fallback = function () { window.prompt("Copy this link:", url); };
+    try { navigator.clipboard.writeText(url).then(done, fallback); } catch (err) { fallback(); }
+  });
+})();
+</script>
 <script>
 (function () {
   var ua = navigator.userAgent || "";
   if (!/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|FB_IAB/i.test(ua)) return;
   document.getElementById("inapp").style.display = "block";
+  document.getElementById("inapp-help").style.display = "none";
   // Keep where the visit came from when it moves to the real browser: the
   // ad's click id (ttclid, fbclid) can get dropped on the way, ?src= is ours.
   var q = new URLSearchParams(location.search);
