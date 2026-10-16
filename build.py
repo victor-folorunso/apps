@@ -151,6 +151,124 @@ TRACK = r"""
 </script>"""
 
 
+# A checklist for people who've never joined a test: one big numbered card per
+# step, the current one highlighted, finished ones ticked, and a live countdown
+# for the wait (Google takes minutes to add a new group member). Progress is
+# kept in this browser so coming back from Google Groups or Play picks up where
+# they were. Opt in per app: "guided_steps": true ("after_install" sets step 4).
+GUIDED_STYLE = """
+.flow-head { font-size:1.35rem; font-weight:800; margin:28px 0 2px; }
+.gstep { display:flex; gap:14px; background:var(--panel); border:2px solid var(--line);
+         border-radius:18px; padding:18px; margin:14px 0; transition:opacity .2s, border-color .2s; }
+.gstep .num { flex:none; width:44px; height:44px; border-radius:50%; display:flex; align-items:center;
+              justify-content:center; font-weight:800; font-size:1.3rem; background:var(--line); color:var(--text); }
+.gstep .gbody { flex:1; min-width:0; }
+.gstep .gtitle { font-size:1.2rem; font-weight:800; line-height:1.3; margin-top:8px; }
+.gstep .gtext { color:var(--dim); margin-top:4px; }
+.gstep[data-state="now"] { border-color:var(--accent); }
+.gstep[data-state="now"] .num { background:var(--accent); color:#1a0f07; }
+.gstep[data-state="later"] { opacity:.5; }
+.gstep[data-state="done"] { opacity:.6; }
+.gstep[data-state="done"] .num { background:#3aa76d; color:#fff; font-size:0; }
+.gstep[data-state="done"] .num::after { content:"✓"; font-size:1.4rem; }
+.gstep[data-state="done"] .gtext, .gstep[data-state="done"] .button, .gstep[data-state="done"] .timer { display:none; }
+.gstep .here { display:none; font-size:.8rem; font-weight:800; letter-spacing:.08em; color:var(--accent); }
+.gstep[data-state="now"] .here { display:block; }
+.timer { margin-top:12px; }
+.timer .clock { font-size:2.2rem; font-weight:800; font-variant-numeric:tabular-nums; }
+.timer .bar { height:8px; border-radius:8px; background:var(--line); overflow:hidden; margin-top:6px; }
+.timer .bar i { display:block; height:100%; width:0; background:var(--accent); transition:width 1s linear; }
+.skip { display:inline-block; margin-top:10px; font-size:.95rem; }
+"""
+
+GUIDED_SCRIPT = """
+<script>
+(function () {
+  var WAIT = 5 * 60 * 1000, KEY = "wp-steps-%(id)s";
+  var ua = navigator.userAgent || "";
+  if (/iphone|ipad|ipod/i.test(ua)) document.getElementById("ios-note").style.display = "block";
+  var load = function () { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
+  var save = function (s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} };
+  var st = load();
+  var set = function (id, state) { document.getElementById(id).setAttribute("data-state", state); };
+  var timer, last;
+  function render() {
+    var left = st.joined ? Math.max(0, st.joined + WAIT - Date.now()) : WAIT;
+    var step = st.got ? 4 : !st.joined ? 1 : left > 0 ? 2 : 3;
+    ["g1", "g2", "g3", "g4"].forEach(function (id, i) {
+      set(id, i + 1 < step ? "done" : i + 1 === step ? "now" : "later");
+    });
+    document.getElementById("g-skip").style.display = step === 1 ? "inline-block" : "none";
+    document.getElementById("g-timer").style.display = step === 2 ? "block" : "none";
+    if (step === 2) {
+      var sec = Math.ceil(left / 1000);
+      document.getElementById("g-clock").textContent = Math.floor(sec / 60) + ":" + ("0" + (sec %% 60)).slice(-2);
+      document.getElementById("g-bar").style.width = (100 - (left / WAIT) * 100) + "%%";
+      if (!timer) timer = setInterval(render, 1000);
+    } else if (timer) { clearInterval(timer); timer = null; }
+    // Moving on to a new step: bring it into view.
+    if (last && last !== step) document.getElementById("g" + step).scrollIntoView({ behavior: "smooth", block: "center" });
+    last = step;
+  }
+  document.getElementById("g-join").addEventListener("click", function () {
+    if (!st.joined) { st.joined = Date.now(); save(st); }
+    setTimeout(render, 300);
+  });
+  document.getElementById("g-get").addEventListener("click", function () {
+    if (!st.joined) st.joined = Date.now() - WAIT;
+    st.got = Date.now(); save(st); setTimeout(render, 300);
+  });
+  document.getElementById("g-skip").addEventListener("click", function (e) {
+    e.preventDefault(); st.joined = Date.now() - WAIT; save(st); render();
+  });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) render(); });
+  render();
+})();
+</script>"""
+
+
+def guided_steps(app, name, group, test):
+    track = bool(app.get("track_url"))
+    t = lambda event: f' data-track="{event}"' if track else ""
+    after = html.escape(app.get("after_install", f"Open {app['name']} and sign in."))
+    return f"""
+<style>{GUIDED_STYLE}</style>
+<div id="ios-note" class="short" style="display:none;border-color:var(--accent)">&#128241; <b>{name} is
+Android only for now.</b> Open this page on an Android phone to join.</div>
+<div class="flow-head">Get {name} in 4 easy steps</div>
+<div class="dim">Takes about 10 minutes. Do them in order, on your Android phone.</div>
+
+<div class="gstep" id="g1" data-state="now"><div class="num">1</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Join the testers</div>
+<div class="gtext">Tap the button. On the page that opens, tap <b>Join group</b>. Then come back to this page.</div>
+<a class="button" id="g-join" href="{group}"{t("join")}>Join testers</a></div></div>
+
+<div class="gstep" id="g2" data-state="later"><div class="num">2</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Wait 5 minutes &#9203;</div>
+<div class="gtext">Google is adding you to the testers. Stay on this page or come back later: it remembers where you are.</div>
+<div class="timer" id="g-timer" style="display:none"><div class="clock" id="g-clock">5:00</div>
+<div class="bar"><i id="g-bar"></i></div></div></div></div>
+
+<div class="gstep" id="g3" data-state="later"><div class="num">3</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Get the app</div>
+<div class="gtext">Tap the button, then tap <b>Become a tester</b>, then <b>Download it on Google Play</b>.
+If it says you&#39;re not a tester, wait a few more minutes and try again.</div>
+<a class="button" id="g-get" href="{test}"{t("get")}>Get {name}</a></div></div>
+
+<div class="gstep" id="g4" data-state="later"><div class="num">4</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Open it and sign in</div>
+<div class="gtext">{after}</div></div></div>
+
+<a href="#" class="skip" id="g-skip">Already joined the testers before? Skip to step 3</a>
+<p class="dim">Your Play Store must use the same Google account you joined with. Please keep the app
+installed for two weeks: Google counts testers before the public release.</p>
+{GUIDED_SCRIPT % {"id": app["id"]}}"""
+
+
 def promo_box(promo):
     """Bonus reminder: {"code": "...", "text": "..."} in apps.json."""
     return f"""
@@ -163,7 +281,10 @@ border-radius:12px;font-size:1.5rem;font-weight:800;letter-spacing:.06em">{html.
 def app_page(app, data):
     play = f"https://play.google.com/store/apps/details?id={app['package']}"
     name = html.escape(app["name"])
-    if app["status"] == "testing":
+    if app["status"] == "testing" and app.get("guided_steps"):
+        how = guided_steps(app, name, f"https://groups.google.com/g/{data['testers_group']}",
+                           f"https://play.google.com/apps/testing/{app['package']}")
+    elif app["status"] == "testing":
         group = f"https://groups.google.com/g/{data['testers_group']}"
         test = f"https://play.google.com/apps/testing/{app['package']}"
         how = f"""

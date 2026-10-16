@@ -41,7 +41,9 @@
         "text": "Early tester bonus: your first month is free, plus 6 more months with this code (first 100 testers).",
         "where": "After you sign in: Profile > Subscription > Have a code?"
       },
-      "delete_account_updated": "8 October 2026"
+      "delete_account_updated": "8 October 2026",
+      "guided_steps": true,
+      "after_install": "Open ContactSync and sign in with your WhatsApp number. Then claim your bonus: Profile > Subscription > Have a code?"
     },
     {
       "id": "bitnook",
