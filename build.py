@@ -191,18 +191,23 @@ GUIDED_STYLE = """
 .gstep .gtext { color:var(--dim); margin-top:4px; }
 .gstep[data-state="now"] { border-color:var(--accent); }
 .gstep[data-state="now"] .num { background:var(--accent); color:#1a0f07; }
-.gstep[data-state="later"] { opacity:.5; }
-.gstep[data-state="done"] { opacity:.6; }
+.gstep[data-state="later"] { opacity:.6; }
+.gstep[data-state="done"] { opacity:.8; }
 .gstep[data-state="done"] .num { background:#3aa76d; color:#fff; font-size:0; }
 .gstep[data-state="done"] .num::after { content:"✓"; font-size:1.4rem; }
-.gstep[data-state="done"] .gtext, .gstep[data-state="done"] .button, .gstep[data-state="done"] .timer { display:none; }
+.gstep[data-state="done"] .timer, .gstep[data-state="done"] .here { display:none; }
 .gstep .here { display:none; font-size:.8rem; font-weight:800; letter-spacing:.08em; color:var(--accent); }
 .gstep[data-state="now"] .here { display:block; }
 .timer { margin-top:12px; }
 .timer .clock { font-size:2.2rem; font-weight:800; font-variant-numeric:tabular-nums; }
 .timer .bar { height:8px; border-radius:8px; background:var(--line); overflow:hidden; margin-top:6px; }
 .timer .bar i { display:block; height:100%; width:0; background:var(--accent); transition:width 1s linear; }
-.skip { display:inline-block; margin-top:10px; font-size:.95rem; }
+.skip { display:inline-block; margin:10px 16px 0 0; font-size:.95rem; }
+.flow-head { margin-top:6px; }
+.inapp-help { margin-top:12px; font-size:.9rem; color:var(--dim); }
+.inapp-help .row { display:flex; gap:8px; margin-top:8px; }
+.inapp-help .button { flex:1; margin-top:0; padding:10px; font-size:.95rem; }
+.inapp-help.detected { color:var(--text); border-left:3px solid var(--accent); padding-left:10px; }
 """
 
 GUIDED_SCRIPT = """
@@ -223,6 +228,7 @@ GUIDED_SCRIPT = """
       set(id, i + 1 < step ? "done" : i + 1 === step ? "now" : "later");
     });
     document.getElementById("g-skip").style.display = step === 1 ? "inline-block" : "none";
+    document.getElementById("g-reset").style.display = step > 1 ? "inline-block" : "none";
     document.getElementById("g-timer").style.display = step === 2 ? "block" : "none";
     if (step === 2) {
       var sec = Math.ceil(left / 1000);
@@ -245,13 +251,47 @@ GUIDED_SCRIPT = """
   document.getElementById("g-skip").addEventListener("click", function (e) {
     e.preventDefault(); st.joined = Date.now() - WAIT; save(st); render();
   });
+  document.getElementById("g-reset").addEventListener("click", function (e) {
+    e.preventDefault(); st = {}; save(st); render();
+  });
   document.addEventListener("visibilitychange", function () { if (!document.hidden) render(); });
+
+  // Inside TikTok / Instagram / Facebook: Google sign-in (joining the group)
+  // doesn't work there. Keep where the visit came from (?src=, which survives
+  // the move), send the step buttons to the real browser on Android, and offer
+  // Open in browser. The plain how-to and Copy link show for everyone, in case
+  // the in-app browser isn't recognised.
+  var inapp = /musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|FB_IAB/i.test(ua);
+  var q = new URLSearchParams(location.search);
+  if (inapp && !q.get("src")) {
+    q.set("src", q.get("ttclid") ? "tiktok_ad" : q.get("fbclid") ? "facebook_ad"
+      : /Instagram/i.test(ua) ? "instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "facebook" : "tiktok");
+    try { history.replaceState(null, "", location.pathname + "?" + q.toString() + location.hash); } catch (e) {}
+  }
+  var toBrowser = function (href) { return "intent://" + href.replace(/^https?:\/\//, "") + "#Intent;scheme=https;end"; };
+  if (inapp) {
+    document.getElementById("inapp-help").className += " detected";
+    if (/android/i.test(ua)) {
+      var ob = document.getElementById("open-browser");
+      ob.style.display = "block";
+      ob.href = toBrowser(location.href);
+      ["g-join", "g-get"].forEach(function (id) { var a = document.getElementById(id); a.href = toBrowser(a.href); });
+    }
+  }
+  var copy = document.getElementById("copy-link");
+  copy.addEventListener("click", function (e) {
+    e.preventDefault();
+    var url = location.href;
+    var done = function () { copy.textContent = "Copied! Paste it in your browser"; };
+    var fallback = function () { window.prompt("Copy this link:", url); };
+    try { navigator.clipboard.writeText(url).then(done, fallback); } catch (err) { fallback(); }
+  });
   render();
 })();
 </script>"""
 
 
-def guided_steps(app, name, group, test):
+def guided_steps(app, name, group, test, link):
     track = bool(app.get("track_url"))
     t = lambda event: f' data-track="{event}"' if track else ""
     after = html.escape(app.get("after_install", f"Open {app['name']} and sign in."))
@@ -259,14 +299,19 @@ def guided_steps(app, name, group, test):
 <style>{GUIDED_STYLE}</style>
 <div id="ios-note" class="short" style="display:none;border-color:var(--accent)">&#128241; <b>{name} is
 Android only for now.</b> Open this page on an Android phone to join.</div>
-<div class="flow-head">Get {name} in 4 easy steps</div>
-<div class="dim">Takes about 10 minutes. Do them in order, on your Android phone.</div>
+<div class="flow-head">Get it in 4 steps</div>
+<div class="dim">About 10 minutes, on your Android phone.</div>
 
 <div class="gstep" id="g1" data-state="now"><div class="num">1</div><div class="gbody">
 <div class="here">DO THIS NOW</div>
 <div class="gtitle">Join the testers</div>
 <div class="gtext">Tap the button. On the page that opens, tap <b>Join group</b>. Then come back to this page.</div>
-<a class="button" id="g-join" href="{group}"{t("join")}>Join testers</a></div></div>
+<a class="button" id="g-join" href="{group}"{t("join")}>Join testers</a>
+<div class="inapp-help" id="inapp-help"><b>In TikTok, Instagram or Facebook?</b> Joining only works in your
+browser: tap <b>&hellip;</b> or <b>&#8942;</b> at the top right, then <b>Open in browser</b>.
+<div class="row"><a class="button" id="open-browser" href="#" style="display:none"{t("open_browser")}>Open in browser</a>
+<a class="button secondary" id="copy-link" href="#"{t("copy_link")}>Copy link</a></div>
+<div style="margin-top:6px;word-break:break-all">{link}</div></div></div></div>
 
 <div class="gstep" id="g2" data-state="later"><div class="num">2</div><div class="gbody">
 <div class="here">DO THIS NOW</div>
@@ -288,6 +333,7 @@ If it says you&#39;re not a tester, wait a few more minutes and try again.</div>
 <div class="gtext">{after}</div></div></div>
 
 <a href="#" class="skip" id="g-skip">Already joined the testers before? Skip to step 3</a>
+<a href="#" class="skip" id="g-reset">Start over</a>
 <p class="dim">Your Play Store must use the same Google account you joined with. Please keep the app
 installed for two weeks: Google counts testers before the public release.</p>
 {GUIDED_SCRIPT % {"id": app["id"]}}"""
@@ -307,7 +353,8 @@ def app_page(app, data):
     name = html.escape(app["name"])
     if app["status"] == "testing" and app.get("guided_steps"):
         how = guided_steps(app, name, f"https://groups.google.com/g/{data['testers_group']}",
-                           f"https://play.google.com/apps/testing/{app['package']}")
+                           f"https://play.google.com/apps/testing/{app['package']}",
+                           SITE.split('//')[1] + app['id'])
     elif app["status"] == "testing":
         group = f"https://groups.google.com/g/{data['testers_group']}"
         test = f"https://play.google.com/apps/testing/{app['package']}"
@@ -323,6 +370,19 @@ Please keep the app installed for two weeks: Google counts testers before the
 public release.</p>"""
     else:
         how = f'<a class="button" href="{play}">Get it on Google Play</a>'
+    if app.get("guided_steps") and app["status"] == "testing":
+        # The app, then the first step, all without scrolling on a phone; the
+        # in-app-browser help lives under step 1, the bonus after the steps.
+        body = f"""
+<div class="hero" style="margin:0 0 12px;gap:16px"><img src="icon.png" alt="" style="width:72px;height:72px;border-radius:18px">
+<div><h1 style="font-size:1.7rem">{name}</h1><div class="dim">{html.escape(app['tagline'])}</div></div></div>
+<p style="margin:0">{html.escape(app['about'])}</p>
+{how}
+{promo_box(app['promo']) + chr(10) if app.get('promo') else ''}<h2>More</h2>
+<p><a href="privacy/">Privacy policy</a>{extra_links(app)} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
+        if app.get("track_url"):
+            body += TRACK % {"url": app["track_url"], "app": app["id"]}
+        return page(f"{app['name']} by wonderperk", app["tagline"], body, 1, app.get("accent", "#e0a36a"))
     body = f"""
 {INAPP_TIP.replace('%LINK%', SITE.split('//')[1] + app['id']) + chr(10) if app.get('inapp_tip') else ''}<div class="hero"><img src="icon.png" alt="">
 <div><h1>{name}</h1><div class="dim">{html.escape(app['tagline'])}</div></div></div>

@@ -37,72 +37,9 @@ footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
 </head>
 <body><main>
 
-
-<div id="inapp" style="display:none;margin:0 0 18px;padding:18px;border-radius:16px;background:var(--accent);color:#fff;text-align:center">
-<div style="font-size:1.15rem;font-weight:800;margin-bottom:6px">First: open this page in your browser</div>
-<div style="opacity:.9">You opened it inside TikTok, Instagram or Facebook, where joining the testers
-doesn&#39;t work.</div>
-<a class="button" id="open-browser" href="#" data-track="open_browser"
-style="background:#fff;color:var(--accent);font-size:1.1rem;margin-top:14px">Open in browser</a>
-<div style="opacity:.85;font-size:.9rem;margin-top:10px">Not working? Tap <b>&#8942;</b> or <b>&hellip;</b>
-at the top right, then <b>Open in browser</b>.</div></div>
-<!-- Plain fallback for everyone: the banner above relies on recognising the
-     in-app browser, which can fail. Hidden only when the banner shows. -->
-<div id="inapp-help" class="short" style="margin:0 0 18px">
-<b>Came here from TikTok, Instagram or Facebook?</b> Open this page in your phone&#39;s browser
-first, or joining won&#39;t work:
-<ol style="margin:8px 0 0;padding-left:22px">
-<li>Tap <b>&hellip;</b> or <b>&#8942;</b> at the <b>top right</b> of your screen</li>
-<li>Tap <b>Open in browser</b></li></ol>
-<div style="margin-top:10px">Can&#39;t find it? Copy this link and paste it into your browser:<br>
-<b style="word-break:break-all">victor-folorunso.github.io/apps/contactsync</b></div>
-<a class="button secondary" id="copy-link" href="#" data-track="copy_link">Copy link</a></div>
-<script>
-(function () {
-  var btn = document.getElementById("copy-link");
-  btn.addEventListener("click", function (e) {
-    e.preventDefault();
-    var url = location.href;
-    var done = function () { btn.textContent = "Copied! Now paste it in your browser"; };
-    var fallback = function () { window.prompt("Copy this link:", url); };
-    try { navigator.clipboard.writeText(url).then(done, fallback); } catch (err) { fallback(); }
-  });
-})();
-</script>
-<script>
-(function () {
-  var ua = navigator.userAgent || "";
-  if (!/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|FB_IAB/i.test(ua)) return;
-  document.getElementById("inapp").style.display = "block";
-  document.getElementById("inapp-help").style.display = "none";
-  // Keep where the visit came from when it moves to the real browser: the
-  // ad's click id (ttclid, fbclid) can get dropped on the way, ?src= is ours.
-  var q = new URLSearchParams(location.search);
-  if (!q.get("src")) {
-    q.set("src", q.get("ttclid") ? "tiktok_ad" : q.get("fbclid") ? "facebook_ad"
-      : /Instagram/i.test(ua) ? "instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "facebook" : "tiktok");
-    // Also covers the in-app browser's own "Open in browser" menu, which uses the current URL.
-    try { history.replaceState(null, "", location.pathname + "?" + q.toString() + location.hash); } catch (e) {}
-  }
-  // No package: Android hands it to the person's default browser.
-  var toBrowser = function (href) { return "intent://" + href.replace(/^https?:\/\//, "") + "#Intent;scheme=https;end"; };
-  document.getElementById("open-browser").href = toBrowser(location.href);
-  // The step buttons too: Google sign-in only works in the real browser.
-  // (They come later in the page, so wait for it to load.)
-  if (/android/i.test(ua)) document.addEventListener("DOMContentLoaded", function () {
-    var buttons = document.querySelectorAll("a.button[data-track='join'], a.button[data-track='get']");
-    for (var i = 0; i < buttons.length; i++) buttons[i].href = toBrowser(buttons[i].href);
-  });
-})();
-</script>
-<div class="hero"><img src="icon.png" alt="">
-<div><h1>ContactSync</h1><div class="dim">Meet people in your niche.</div></div></div>
-<p>Pick tags that describe you. ContactSync matches you with people who share them and adds you to each other&#x27;s phone contacts, always both ways. Your address book never leaves your phone. 18+.</p>
-
-<div class="short" style="text-align:center">&#127873; Early tester bonus: your first month is free, plus 6 more months with this code (first 100 testers).
-<div style="margin:12px auto 4px;display:inline-block;padding:10px 22px;border:2px dashed var(--accent);
-border-radius:12px;font-size:1.5rem;font-weight:800;letter-spacing:.06em">FOUNDER100</div>
-<div class="dim">After you sign in: Profile &gt; Subscription &gt; Have a code?</div></div>
+<div class="hero" style="margin:0 0 12px;gap:16px"><img src="icon.png" alt="" style="width:72px;height:72px;border-radius:18px">
+<div><h1 style="font-size:1.7rem">ContactSync</h1><div class="dim">Meet people in your niche.</div></div></div>
+<p style="margin:0">Choose who lands in your phone contacts: people with your tags, buyers or sellers, a state, an age range. They get your number too, always both ways. Android, 18+.</p>
 
 <style>
 .flow-head { font-size:1.35rem; font-weight:800; margin:28px 0 2px; }
@@ -115,29 +52,39 @@ border-radius:12px;font-size:1.5rem;font-weight:800;letter-spacing:.06em">FOUNDE
 .gstep .gtext { color:var(--dim); margin-top:4px; }
 .gstep[data-state="now"] { border-color:var(--accent); }
 .gstep[data-state="now"] .num { background:var(--accent); color:#1a0f07; }
-.gstep[data-state="later"] { opacity:.5; }
-.gstep[data-state="done"] { opacity:.6; }
+.gstep[data-state="later"] { opacity:.6; }
+.gstep[data-state="done"] { opacity:.8; }
 .gstep[data-state="done"] .num { background:#3aa76d; color:#fff; font-size:0; }
 .gstep[data-state="done"] .num::after { content:"✓"; font-size:1.4rem; }
-.gstep[data-state="done"] .gtext, .gstep[data-state="done"] .button, .gstep[data-state="done"] .timer { display:none; }
+.gstep[data-state="done"] .timer, .gstep[data-state="done"] .here { display:none; }
 .gstep .here { display:none; font-size:.8rem; font-weight:800; letter-spacing:.08em; color:var(--accent); }
 .gstep[data-state="now"] .here { display:block; }
 .timer { margin-top:12px; }
 .timer .clock { font-size:2.2rem; font-weight:800; font-variant-numeric:tabular-nums; }
 .timer .bar { height:8px; border-radius:8px; background:var(--line); overflow:hidden; margin-top:6px; }
 .timer .bar i { display:block; height:100%; width:0; background:var(--accent); transition:width 1s linear; }
-.skip { display:inline-block; margin-top:10px; font-size:.95rem; }
+.skip { display:inline-block; margin:10px 16px 0 0; font-size:.95rem; }
+.flow-head { margin-top:6px; }
+.inapp-help { margin-top:12px; font-size:.9rem; color:var(--dim); }
+.inapp-help .row { display:flex; gap:8px; margin-top:8px; }
+.inapp-help .button { flex:1; margin-top:0; padding:10px; font-size:.95rem; }
+.inapp-help.detected { color:var(--text); border-left:3px solid var(--accent); padding-left:10px; }
 </style>
 <div id="ios-note" class="short" style="display:none;border-color:var(--accent)">&#128241; <b>ContactSync is
 Android only for now.</b> Open this page on an Android phone to join.</div>
-<div class="flow-head">Get ContactSync in 4 easy steps</div>
-<div class="dim">Takes about 10 minutes. Do them in order, on your Android phone.</div>
+<div class="flow-head">Get it in 4 steps</div>
+<div class="dim">About 10 minutes, on your Android phone.</div>
 
 <div class="gstep" id="g1" data-state="now"><div class="num">1</div><div class="gbody">
 <div class="here">DO THIS NOW</div>
 <div class="gtitle">Join the testers</div>
 <div class="gtext">Tap the button. On the page that opens, tap <b>Join group</b>. Then come back to this page.</div>
-<a class="button" id="g-join" href="https://groups.google.com/g/wonderperk-testers" data-track="join">Join testers</a></div></div>
+<a class="button" id="g-join" href="https://groups.google.com/g/wonderperk-testers" data-track="join">Join testers</a>
+<div class="inapp-help" id="inapp-help"><b>In TikTok, Instagram or Facebook?</b> Joining only works in your
+browser: tap <b>&hellip;</b> or <b>&#8942;</b> at the top right, then <b>Open in browser</b>.
+<div class="row"><a class="button" id="open-browser" href="#" style="display:none" data-track="open_browser">Open in browser</a>
+<a class="button secondary" id="copy-link" href="#" data-track="copy_link">Copy link</a></div>
+<div style="margin-top:6px;word-break:break-all">victor-folorunso.github.io/apps/contactsync</div></div></div></div>
 
 <div class="gstep" id="g2" data-state="later"><div class="num">2</div><div class="gbody">
 <div class="here">DO THIS NOW</div>
@@ -159,6 +106,7 @@ If it says you&#39;re not a tester, wait a few more minutes and try again.</div>
 <div class="gtext">Open ContactSync and sign in with your WhatsApp number. Then claim your bonus: Profile &gt; Subscription &gt; Have a code?</div></div></div>
 
 <a href="#" class="skip" id="g-skip">Already joined the testers before? Skip to step 3</a>
+<a href="#" class="skip" id="g-reset">Start over</a>
 <p class="dim">Your Play Store must use the same Google account you joined with. Please keep the app
 installed for two weeks: Google counts testers before the public release.</p>
 
@@ -179,6 +127,7 @@ installed for two weeks: Google counts testers before the public release.</p>
       set(id, i + 1 < step ? "done" : i + 1 === step ? "now" : "later");
     });
     document.getElementById("g-skip").style.display = step === 1 ? "inline-block" : "none";
+    document.getElementById("g-reset").style.display = step > 1 ? "inline-block" : "none";
     document.getElementById("g-timer").style.display = step === 2 ? "block" : "none";
     if (step === 2) {
       var sec = Math.ceil(left / 1000);
@@ -201,10 +150,49 @@ installed for two weeks: Google counts testers before the public release.</p>
   document.getElementById("g-skip").addEventListener("click", function (e) {
     e.preventDefault(); st.joined = Date.now() - WAIT; save(st); render();
   });
+  document.getElementById("g-reset").addEventListener("click", function (e) {
+    e.preventDefault(); st = {}; save(st); render();
+  });
   document.addEventListener("visibilitychange", function () { if (!document.hidden) render(); });
+
+  // Inside TikTok / Instagram / Facebook: Google sign-in (joining the group)
+  // doesn't work there. Keep where the visit came from (?src=, which survives
+  // the move), send the step buttons to the real browser on Android, and offer
+  // Open in browser. The plain how-to and Copy link show for everyone, in case
+  // the in-app browser isn't recognised.
+  var inapp = /musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|FB_IAB/i.test(ua);
+  var q = new URLSearchParams(location.search);
+  if (inapp && !q.get("src")) {
+    q.set("src", q.get("ttclid") ? "tiktok_ad" : q.get("fbclid") ? "facebook_ad"
+      : /Instagram/i.test(ua) ? "instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "facebook" : "tiktok");
+    try { history.replaceState(null, "", location.pathname + "?" + q.toString() + location.hash); } catch (e) {}
+  }
+  var toBrowser = function (href) { return "intent://" + href.replace(/^https?:\/\//, "") + "#Intent;scheme=https;end"; };
+  if (inapp) {
+    document.getElementById("inapp-help").className += " detected";
+    if (/android/i.test(ua)) {
+      var ob = document.getElementById("open-browser");
+      ob.style.display = "block";
+      ob.href = toBrowser(location.href);
+      ["g-join", "g-get"].forEach(function (id) { var a = document.getElementById(id); a.href = toBrowser(a.href); });
+    }
+  }
+  var copy = document.getElementById("copy-link");
+  copy.addEventListener("click", function (e) {
+    e.preventDefault();
+    var url = location.href;
+    var done = function () { copy.textContent = "Copied! Paste it in your browser"; };
+    var fallback = function () { window.prompt("Copy this link:", url); };
+    try { navigator.clipboard.writeText(url).then(done, fallback); } catch (err) { fallback(); }
+  });
   render();
 })();
 </script>
+
+<div class="short" style="text-align:center">&#127873; Early tester bonus: your first month is free, plus 6 more months with this code (first 100 testers).
+<div style="margin:12px auto 4px;display:inline-block;padding:10px 22px;border:2px dashed var(--accent);
+border-radius:12px;font-size:1.5rem;font-weight:800;letter-spacing:.06em">FOUNDER100</div>
+<div class="dim">After you sign in: Profile &gt; Subscription &gt; Have a code?</div></div>
 <h2>More</h2>
 <p><a href="privacy/">Privacy policy</a> &middot; <a href="terms/">Terms of service</a> &middot; <a href="delete-account/">Delete your account</a> &middot; <a href="child-safety/">Child safety</a> &middot; Contact: <a href="mailto:victorfolorunsoofficial@gmail.com">victorfolorunsoofficial@gmail.com</a></p>
 <script>
