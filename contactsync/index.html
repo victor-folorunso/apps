@@ -103,7 +103,10 @@ If it says you&#39;re not a tester, wait a few more minutes and try again.</div>
 <div class="gstep" id="g4" data-state="later"><div class="num">4</div><div class="gbody">
 <div class="here">DO THIS NOW</div>
 <div class="gtitle">Open it and sign in</div>
-<div class="gtext">Open ContactSync and sign in with your WhatsApp number. Then claim your bonus: Profile &gt; Subscription &gt; Have a code?</div></div></div>
+<div class="gtext">Open ContactSync and sign in with your WhatsApp number. Then claim your bonus: Profile &gt; Subscription &gt; Have a code?</div>
+<div id="ref-box" style="display:none;margin-top:12px">A friend invited you: enter invite code
+<b id="ref-code" style="letter-spacing:.08em"></b> on the profile step.
+<a class="button secondary" id="ref-copy" href="#">Copy invite code</a></div></div></div>
 
 <a href="#" class="skip" id="g-skip">Already joined the testers before? Skip to step 3</a>
 <a href="#" class="skip" id="g-reset">Start over</a>
@@ -176,6 +179,20 @@ installed for two weeks: Google counts testers before the public release.</p>
       ob.href = toBrowser(location.href);
       ["g-join", "g-get"].forEach(function (id) { var a = document.getElementById(id); a.href = toBrowser(a.href); });
     }
+  }
+  // Invite links (?ref=CODE): show the code to type in at sign-up. Only a
+  // well-formed code is shown; the app checks it with the server anyway.
+  var ref = (q.get("ref") || "").toUpperCase();
+  if (/^[A-HJ-KM-NP-Z2-9]{7}$/.test(ref)) {
+    document.getElementById("ref-code").textContent = ref;
+    document.getElementById("ref-box").style.display = "block";
+    var rc = document.getElementById("ref-copy");
+    rc.addEventListener("click", function (e) {
+      e.preventDefault();
+      var ok = function () { rc.textContent = "Copied: " + ref; };
+      try { navigator.clipboard.writeText(ref).then(ok, function () { window.prompt("Your invite code:", ref); }); }
+      catch (err) { window.prompt("Your invite code:", ref); }
+    });
   }
   var copy = document.getElementById("copy-link");
   copy.addEventListener("click", function (e) {

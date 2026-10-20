@@ -27,12 +27,12 @@
       "icon": "contactsync/icon.png",
       "accent": "#7d9bff",
       "privacy": "privacy/contactsync.html",
-      "privacy_updated": "15 October 2026",
+      "privacy_updated": "20 October 2026",
       "delete_account": "delete-account/contactsync.html",
       "child_safety": "child-safety/contactsync.html",
       "child_safety_updated": "9 October 2026",
       "terms": "terms/contactsync.html",
-      "terms_updated": "9 October 2026",
+      "terms_updated": "20 October 2026",
       "inapp_tip": true,
       "wait_tip": true,
       "track_url": "https://otghxtziicgflxletusz.supabase.co/functions/v1/track",
@@ -41,7 +41,7 @@
         "text": "Early tester bonus: your first month is free, plus 6 more months with this code (first 100 testers).",
         "where": "After you sign in: Profile > Subscription > Have a code?"
       },
-      "delete_account_updated": "8 October 2026",
+      "delete_account_updated": "20 October 2026",
       "guided_steps": true,
       "after_install": "Open ContactSync and sign in with your WhatsApp number. Then claim your bonus: Profile > Subscription > Have a code?"
     },
