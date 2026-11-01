@@ -447,18 +447,63 @@ def extra_links(app):
                    for key, (folder, label, _) in EXTRA_PAGES.items() if app.get(key))
 
 
+# The hub uses the portfolio's shared theme (/theme.css from the
+# victor-folorunso.github.io repo) so it matches the home page and /websites/.
+# The app pages keep STYLE: their tester steps were tuned on it.
 def index_page(data):
     cards = []
     for app in data["apps"]:
         badge = "Testing" if app["status"] == "testing" else "On Google Play"
-        cards.append(f"""<a class="card" href="{app['id']}/"><img src="{app['icon']}" alt="">
-<div><b>{html.escape(app['name'])}</b><span class="badge">{badge}</span>
-<div class="dim">{html.escape(app['tagline'])}</div></div></a>""")
-    body = f"""<h1>wonderperk</h1>
-<p class="dim">Games and apps by wonderperk. Want to try new ones before
+        cards.append(f"""<a class="tile" href="{app['id']}/" style="--tile-accent:{app.get('accent', '#e0a36a')}">
+<div class="tile-media icon"><img src="{app['icon']}" alt=""></div>
+<div class="tile-body"><div class="tile-title"><b>{html.escape(app['name'])}</b><span class="badge">{badge}</span></div>
+<p class="tile-tagline">{html.escape(app['tagline'])}</p>
+<p class="tile-about">{html.escape(app['about'])}</p>
+<span class="tile-link">{'Join the test' if app['status'] == 'testing' else 'Get it'} &rarr;</span></div></a>
+""")
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wonderperk apps</title>
+<meta name="description" content="Games and apps by wonderperk.">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<header class="site-bar">
+  <div class="wrap">
+    <a class="site-name" href="/">Victor<span class="full"> Folorunso</span></a>
+    <nav class="site-nav" aria-label="Site">
+      <a href="/apps/" aria-current="page">Apps</a>
+      <a href="/websites/">Websites</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+<div class="page-head">
+<p class="eyebrow">Apps</p>
+<h1>wonderperk</h1>
+<p>Games and apps by wonderperk. Want to try new ones before
 anyone else? <a href="https://groups.google.com/g/{data['testers_group']}">Join the testers</a>.</p>
-{''.join(cards)}"""
-    return page("wonderperk apps", "Games and apps by wonderperk.", body, 0)
+</div>
+<div class="grid">
+{''.join(cards)}</div>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <span><a href="">All apps</a> &middot; &copy; {html.escape(data['studio'])}</span>
+    <span><a href="/">Home</a> &middot; <a href="/websites/">Websites</a></span>
+  </div>
+</footer>
+</body>
+</html>
+"""
 
 
 def main():

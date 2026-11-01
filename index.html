@@ -5,47 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>wonderperk apps</title>
 <meta name="description" content="Games and apps by wonderperk.">
-<style>
-:root { --bg:#0f1115; --panel:#181b21; --line:#2a2e36; --text:#ece6da; --dim:#a8a192; --accent:#e0a36a; }
-* { box-sizing:border-box; }
-body { margin:0; background:var(--bg); color:var(--text);
-       font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-main { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
-a { color:var(--accent); }
-h1 { font-size:2rem; margin:0 0 4px; letter-spacing:.02em; }
-h2 { font-size:1.1rem; margin:32px 0 8px; color:var(--accent); }
-.dim { color:var(--dim); }
-.card { display:flex; gap:16px; align-items:center; padding:16px; margin:12px 0;
-        background:var(--panel); border:1px solid var(--line); border-radius:16px;
-        color:inherit; text-decoration:none; }
-.card img { width:72px; height:72px; border-radius:16px; flex:none; }
-.card b { font-size:1.15rem; }
-.badge { display:inline-block; font-size:.75rem; padding:2px 8px; border-radius:99px;
-         border:1px solid var(--line); color:var(--dim); margin-left:6px; vertical-align:middle; }
-.hero { display:flex; gap:20px; align-items:center; margin:8px 0 24px; }
-.hero img { width:96px; height:96px; border-radius:22px; }
-.step { background:var(--panel); border:1px solid var(--line); border-radius:16px;
-        padding:20px; margin:16px 0; }
-.step .n { font-weight:700; color:var(--accent); }
-.button { display:block; text-align:center; padding:16px; margin-top:12px;
-          border-radius:14px; background:var(--accent); color:#1a0f07;
-          font-weight:700; font-size:1.1rem; text-decoration:none; }
-.button.secondary { background:transparent; color:var(--text); border:1px solid var(--line); }
-footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
-.short { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin:20px 0; }
- :root { --accent:#e0a36a; }</style>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="/theme.css">
 </head>
-<body><main>
+<body>
+<header class="site-bar">
+  <div class="wrap">
+    <a class="site-name" href="/">Victor<span class="full"> Folorunso</span></a>
+    <nav class="site-nav" aria-label="Site">
+      <a href="/apps/" aria-current="page">Apps</a>
+      <a href="/websites/">Websites</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+<div class="page-head">
+<p class="eyebrow">Apps</p>
 <h1>wonderperk</h1>
-<p class="dim">Games and apps by wonderperk. Want to try new ones before
+<p>Games and apps by wonderperk. Want to try new ones before
 anyone else? <a href="https://groups.google.com/g/wonderperk-testers">Join the testers</a>.</p>
-<a class="card" href="linking/"><img src="linking/icon.png" alt="">
-<div><b>LINKING</b><span class="badge">Testing</span>
-<div class="dim">Line up. Clash. Break through.</div></div></a><a class="card" href="contactsync/"><img src="contactsync/icon.png" alt="">
-<div><b>ContactSync</b><span class="badge">Testing</span>
-<div class="dim">Meet people in your niche.</div></div></a><a class="card" href="bitnook/"><img src="bitnook/icon.png" alt="">
-<div><b>Bitnook</b><span class="badge">Testing</span>
-<div class="dim">Small games, instantly.</div></div></a>
-<footer><a href="">All apps</a> &middot; &copy; wonderperk</footer>
-</main></body>
+</div>
+<div class="grid">
+<a class="tile" href="linking/" style="--tile-accent:#e0a36a">
+<div class="tile-media icon"><img src="linking/icon.png" alt=""></div>
+<div class="tile-body"><div class="tile-title"><b>LINKING</b><span class="badge">Testing</span></div>
+<p class="tile-tagline">Line up. Clash. Break through.</p>
+<p class="tile-about">A two-player strategy board game of diagonal lines, clashes and breakthroughs. Play the computer, a friend on one phone, or a friend&#x27;s phone nearby over Bluetooth.</p>
+<span class="tile-link">Join the test &rarr;</span></div></a>
+<a class="tile" href="contactsync/" style="--tile-accent:#7d9bff">
+<div class="tile-media icon"><img src="contactsync/icon.png" alt=""></div>
+<div class="tile-body"><div class="tile-title"><b>ContactSync</b><span class="badge">Testing</span></div>
+<p class="tile-tagline">Meet people in your niche.</p>
+<p class="tile-about">Choose who lands in your phone contacts: people with your tags, buyers or sellers, a state, an age range. They get your number too, always both ways. Android, 18+.</p>
+<span class="tile-link">Join the test &rarr;</span></div></a>
+<a class="tile" href="bitnook/" style="--tile-accent:#ffa94d">
+<div class="tile-media icon"><img src="bitnook/icon.png" alt=""></div>
+<div class="tile-body"><div class="tile-title"><b>Bitnook</b><span class="badge">Testing</span></div>
+<p class="tile-tagline">Small games, instantly.</p>
+<p class="tile-about">A shelf of tiny web games that live on your phone, and a way to hand one to a friend. No account, no server, no feed — a game is a single HTML file that runs sealed off, with no network of its own. Pass one the way you&#x27;d pass a photo.</p>
+<span class="tile-link">Join the test &rarr;</span></div></a>
+</div>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <span><a href="">All apps</a> &middot; &copy; wonderperk</span>
+    <span><a href="/">Home</a> &middot; <a href="/websites/">Websites</a></span>
+  </div>
+</footer>
+</body>
 </html>
