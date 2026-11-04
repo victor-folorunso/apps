@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handharbor by wonderperk</title>
+<meta name="description" content="One broker. Your whole project.">
+<style>
+:root { --bg:#0f1115; --panel:#181b21; --line:#2a2e36; --text:#ece6da; --dim:#a8a192; --accent:#e0a36a; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text);
+       font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+main { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
+a { color:var(--accent); }
+h1 { font-size:2rem; margin:0 0 4px; letter-spacing:.02em; }
+h2 { font-size:1.1rem; margin:32px 0 8px; color:var(--accent); }
+.dim { color:var(--dim); }
+.card { display:flex; gap:16px; align-items:center; padding:16px; margin:12px 0;
+        background:var(--panel); border:1px solid var(--line); border-radius:16px;
+        color:inherit; text-decoration:none; }
+.card img { width:72px; height:72px; border-radius:16px; flex:none; }
+.card b { font-size:1.15rem; }
+.badge { display:inline-block; font-size:.75rem; padding:2px 8px; border-radius:99px;
+         border:1px solid var(--line); color:var(--dim); margin-left:6px; vertical-align:middle; }
+.hero { display:flex; gap:20px; align-items:center; margin:8px 0 24px; }
+.hero img { width:96px; height:96px; border-radius:22px; }
+.step { background:var(--panel); border:1px solid var(--line); border-radius:16px;
+        padding:20px; margin:16px 0; }
+.step .n { font-weight:700; color:var(--accent); }
+.button { display:block; text-align:center; padding:16px; margin-top:12px;
+          border-radius:14px; background:var(--accent); color:#1a0f07;
+          font-weight:700; font-size:1.1rem; text-decoration:none; }
+.button.secondary { background:transparent; color:var(--text); border:1px solid var(--line); }
+footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
+.short { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin:20px 0; }
+ :root { --accent:#f2b544; }</style>
+</head>
+<body><main>
+
+<div class="hero" style="margin:0 0 12px;gap:16px"><img src="icon.png" alt="" style="width:72px;height:72px;border-radius:18px">
+<div><h1 style="font-size:1.7rem">Handharbor</h1><div class="dim">One broker. Your whole project.</div></div></div>
+<p style="margin:0">Hire one vetted project broker who builds the team, manages the work and delivers it. Brokers are checked by hand: their freelance profiles, and their ID on a video call. This test version runs on sample data.</p>
+
+<style>
+.flow-head { font-size:1.35rem; font-weight:800; margin:28px 0 2px; }
+.gstep { display:flex; gap:14px; background:var(--panel); border:2px solid var(--line);
+         border-radius:18px; padding:18px; margin:14px 0; transition:opacity .2s, border-color .2s; }
+.gstep .num { flex:none; width:44px; height:44px; border-radius:50%; display:flex; align-items:center;
+              justify-content:center; font-weight:800; font-size:1.3rem; background:var(--line); color:var(--text); }
+.gstep .gbody { flex:1; min-width:0; }
+.gstep .gtitle { font-size:1.2rem; font-weight:800; line-height:1.3; margin-top:8px; }
+.gstep .gtext { color:var(--dim); margin-top:4px; }
+.gstep[data-state="now"] { border-color:var(--accent); }
+.gstep[data-state="now"] .num { background:var(--accent); color:#1a0f07; }
+.gstep[data-state="later"] { opacity:.6; }
+.gstep[data-state="done"] { opacity:.8; }
+.gstep[data-state="done"] .num { background:#3aa76d; color:#fff; font-size:0; }
+.gstep[data-state="done"] .num::after { content:"✓"; font-size:1.4rem; }
+.gstep[data-state="done"] .timer, .gstep[data-state="done"] .here { display:none; }
+.gstep .here { display:none; font-size:.8rem; font-weight:800; letter-spacing:.08em; color:var(--accent); }
+.gstep[data-state="now"] .here { display:block; }
+.timer { margin-top:12px; }
+.timer .clock { font-size:2.2rem; font-weight:800; font-variant-numeric:tabular-nums; }
+.timer .bar { height:8px; border-radius:8px; background:var(--line); overflow:hidden; margin-top:6px; }
+.timer .bar i { display:block; height:100%; width:0; background:var(--accent); transition:width 1s linear; }
+.skip { display:inline-block; margin:10px 16px 0 0; font-size:.95rem; }
+.flow-head { margin-top:6px; }
+.inapp-help { margin-top:12px; font-size:.9rem; color:var(--dim); }
+.inapp-help .row { display:flex; gap:8px; margin-top:8px; }
+.inapp-help .button { flex:1; margin-top:0; padding:10px; font-size:.95rem; }
+.inapp-help.detected { color:var(--text); border-left:3px solid var(--accent); padding-left:10px; }
+</style>
+<div id="ios-note" class="short" style="display:none;border-color:var(--accent)">&#128241; <b>Handharbor is
+Android only for now.</b> Open this page on an Android phone to join.</div>
+<div class="flow-head">Get it in 4 steps</div>
+<div class="dim">About 10 minutes, on your Android phone.</div>
+
+<div class="gstep" id="g1" data-state="now"><div class="num">1</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Join the testers</div>
+<div class="gtext">Tap the button. On the page that opens, tap <b>Join group</b>. Then come back to this page.</div>
+<a class="button" id="g-join" href="https://groups.google.com/g/wonderperk-testers">Join testers</a>
+<div class="inapp-help" id="inapp-help"><b>In TikTok, Instagram or Facebook?</b> Joining only works in your
+browser: tap <b>&hellip;</b> or <b>&#8942;</b> at the top right, then <b>Open in browser</b>.
+<div class="row"><a class="button" id="open-browser" href="#" style="display:none">Open in browser</a>
+<a class="button secondary" id="copy-link" href="#">Copy link</a></div>
+<div style="margin-top:6px;word-break:break-all">victor-folorunso.github.io/apps/handharbor</div></div></div></div>
+
+<div class="gstep" id="g2" data-state="later"><div class="num">2</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Wait 5 minutes &#9203;</div>
+<div class="gtext">Google is adding you to the testers. Stay on this page or come back later: it remembers where you are.</div>
+<div class="timer" id="g-timer" style="display:none"><div class="clock" id="g-clock">5:00</div>
+<div class="bar"><i id="g-bar"></i></div></div></div></div>
+
+<div class="gstep" id="g3" data-state="later"><div class="num">3</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Get the app</div>
+<div class="gtext">Tap the button, then tap <b>Become a tester</b>, then <b>Download it on Google Play</b>.
+If it says you&#39;re not a tester, wait a few more minutes and try again.</div>
+<a class="button" id="g-get" href="https://play.google.com/apps/testing/com.wonderperk.handharbor">Get Handharbor</a></div></div>
+
+<div class="gstep" id="g4" data-state="later"><div class="num">4</div><div class="gbody">
+<div class="here">DO THIS NOW</div>
+<div class="gtitle">Open it and sign in</div>
+<div class="gtext">Open Handharbor and sign in with one of the sample accounts: client, broker or reviewer.</div>
+<div id="ref-box" style="display:none;margin-top:12px">A friend invited you: enter invite code
+<b id="ref-code" style="letter-spacing:.08em"></b> on the profile step.
+<a class="button secondary" id="ref-copy" href="#">Copy invite code</a></div></div></div>
+
+<a href="#" class="skip" id="g-skip">Already joined the testers before? Skip to step 3</a>
+<a href="#" class="skip" id="g-reset">Start over</a>
+<p class="dim">Your Play Store must use the same Google account you joined with. Please keep the app
+installed for two weeks: Google counts testers before the public release.</p>
+
+<script>
+(function () {
+  var WAIT = 5 * 60 * 1000, KEY = "wp-steps-handharbor";
+  var ua = navigator.userAgent || "";
+  if (/iphone|ipad|ipod/i.test(ua)) document.getElementById("ios-note").style.display = "block";
+  var load = function () { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
+  var save = function (s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} };
+  var st = load();
+  var set = function (id, state) { document.getElementById(id).setAttribute("data-state", state); };
+  var timer, last;
+  function render() {
+    var left = st.joined ? Math.max(0, st.joined + WAIT - Date.now()) : WAIT;
+    var step = st.got ? 4 : !st.joined ? 1 : left > 0 ? 2 : 3;
+    ["g1", "g2", "g3", "g4"].forEach(function (id, i) {
+      set(id, i + 1 < step ? "done" : i + 1 === step ? "now" : "later");
+    });
+    document.getElementById("g-skip").style.display = step === 1 ? "inline-block" : "none";
+    document.getElementById("g-reset").style.display = step > 1 ? "inline-block" : "none";
+    document.getElementById("g-timer").style.display = step === 2 ? "block" : "none";
+    if (step === 2) {
+      var sec = Math.ceil(left / 1000);
+      document.getElementById("g-clock").textContent = Math.floor(sec / 60) + ":" + ("0" + (sec % 60)).slice(-2);
+      document.getElementById("g-bar").style.width = (100 - (left / WAIT) * 100) + "%";
+      if (!timer) timer = setInterval(render, 1000);
+    } else if (timer) { clearInterval(timer); timer = null; }
+    // Moving on to a new step: bring it into view.
+    if (last && last !== step) document.getElementById("g" + step).scrollIntoView({ behavior: "smooth", block: "center" });
+    last = step;
+  }
+  document.getElementById("g-join").addEventListener("click", function () {
+    if (!st.joined) { st.joined = Date.now(); save(st); }
+    setTimeout(render, 300);
+  });
+  document.getElementById("g-get").addEventListener("click", function () {
+    if (!st.joined) st.joined = Date.now() - WAIT;
+    st.got = Date.now(); save(st); setTimeout(render, 300);
+  });
+  document.getElementById("g-skip").addEventListener("click", function (e) {
+    e.preventDefault(); st.joined = Date.now() - WAIT; save(st); render();
+  });
+  document.getElementById("g-reset").addEventListener("click", function (e) {
+    e.preventDefault(); st = {}; save(st); render();
+  });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) render(); });
+
+  // Inside TikTok / Instagram / Facebook: Google sign-in (joining the group)
+  // doesn't work there. Keep where the visit came from (?src=, which survives
+  // the move), send the step buttons to the real browser on Android, and offer
+  // Open in browser. The plain how-to and Copy link show for everyone, in case
+  // the in-app browser isn't recognised.
+  var inapp = /musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|FB_IAB/i.test(ua);
+  var q = new URLSearchParams(location.search);
+  if (inapp && !q.get("src")) {
+    q.set("src", q.get("ttclid") ? "tiktok_ad" : q.get("fbclid") ? "facebook_ad"
+      : /Instagram/i.test(ua) ? "instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "facebook" : "tiktok");
+    try { history.replaceState(null, "", location.pathname + "?" + q.toString() + location.hash); } catch (e) {}
+  }
+  var toBrowser = function (href) { return "intent://" + href.replace(/^https?:\/\//, "") + "#Intent;scheme=https;end"; };
+  if (inapp) {
+    document.getElementById("inapp-help").className += " detected";
+    if (/android/i.test(ua)) {
+      var ob = document.getElementById("open-browser");
+      ob.style.display = "block";
+      ob.href = toBrowser(location.href);
+      ["g-join", "g-get"].forEach(function (id) { var a = document.getElementById(id); a.href = toBrowser(a.href); });
+    }
+  }
+  // Invite links (?ref=CODE): show the code to type in at sign-up. Only a
+  // well-formed code is shown; the app checks it with the server anyway.
+  var ref = (q.get("ref") || "").toUpperCase();
+  if (/^[A-HJ-KM-NP-Z2-9]{7}$/.test(ref)) {
+    document.getElementById("ref-code").textContent = ref;
+    document.getElementById("ref-box").style.display = "block";
+    var rc = document.getElementById("ref-copy");
+    rc.addEventListener("click", function (e) {
+      e.preventDefault();
+      var ok = function () { rc.textContent = "Copied: " + ref; };
+      try { navigator.clipboard.writeText(ref).then(ok, function () { window.prompt("Your invite code:", ref); }); }
+      catch (err) { window.prompt("Your invite code:", ref); }
+    });
+  }
+  var copy = document.getElementById("copy-link");
+  copy.addEventListener("click", function (e) {
+    e.preventDefault();
+    var url = location.href;
+    var done = function () { copy.textContent = "Copied! Paste it in your browser"; };
+    var fallback = function () { window.prompt("Copy this link:", url); };
+    try { navigator.clipboard.writeText(url).then(done, fallback); } catch (err) { fallback(); }
+  });
+  render();
+})();
+</script>
+<h2>More</h2>
+<p><a href="privacy/">Privacy policy</a> &middot; <a href="delete-account/">Delete your account</a> &middot; Contact: <a href="mailto:victorfolorunsoofficial@gmail.com">victorfolorunsoofficial@gmail.com</a></p>
+<footer><a href="../">All apps</a> &middot; &copy; wonderperk</footer>
+</main></body>
+</html>
