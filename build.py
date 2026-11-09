@@ -167,6 +167,19 @@ TRACK = r"""
     fetch(url, { method: "POST", body: body, keepalive: true, headers: { "Content-Type": "text/plain" } });
   }
   send("page_view");
+  // Live apps: pass the source (and an invite code) to Google Play as the
+  // install referrer, which the app reads on first launch.
+  var play = document.querySelector("[data-play]");
+  if (play) {
+    var ref = (q.get("ref") || "").toUpperCase();
+    var referrer = "utm_source=" + (source || "site") + "&utm_medium=web";
+    if (/^[A-HJ-KM-NP-Z2-9]{7}$/.test(ref)) {
+      referrer += "&utm_content=" + ref;
+      var box = document.getElementById("ref-box");
+      if (box) { document.getElementById("ref-code").textContent = ref; box.style.display = "block"; }
+    }
+    play.href += "&referrer=" + encodeURIComponent(referrer);
+  }
   document.addEventListener("click", function (e) {
     var el = e.target.closest && e.target.closest("[data-track]");
     if (el) send(el.getAttribute("data-track"));
@@ -386,7 +399,11 @@ the same Google account as your Play Store:</p>
 Please keep the app installed for two weeks: Google counts testers before the
 public release.</p>"""
     else:
-        how = f'<a class="button" href="{play}">Get it on Google Play</a>'
+        # data-play: the tracking script adds an install referrer (where the
+        # visitor came from, and any invite code) so the app can read it.
+        how = f"""<a class="button" href="{play}" data-play{' data-track="get"' if app.get('track_url') else ''}>Get it on Google Play</a>
+<div id="ref-box" class="short" style="display:none">A friend invited you: your invite code
+<b id="ref-code" style="letter-spacing:.08em"></b> is added for you. If it isn&#39;t, type it in on the profile step.</div>"""
     if app.get("guided_steps") and app["status"] == "testing":
         # The app, then the first step, all without scrolling on a phone; the
         # in-app-browser help lives under step 1, the bonus after the steps.
