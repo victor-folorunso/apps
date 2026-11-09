@@ -174,7 +174,7 @@ TRACK = r"""
     var ref = (q.get("ref") || "").toUpperCase();
     var referrer = "utm_source=" + (source || "site") + "&utm_medium=web";
     if (/^[A-HJ-KM-NP-Z2-9]{7}$/.test(ref)) {
-      referrer += "&utm_content=" + ref;
+      referrer += "&ref=" + ref;
       var box = document.getElementById("ref-box");
       if (box) { document.getElementById("ref-code").textContent = ref; box.style.display = "block"; }
     }
