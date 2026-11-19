@@ -60,7 +60,7 @@ border-radius:12px;font-size:1.5rem;font-weight:800;letter-spacing:.06em">FOUNDE
   // ?src= wins; otherwise the click IDs ad platforms add to ad links.
   var q = new URLSearchParams(location.search);
   var source = (q.get("src") || (q.get("ttclid") ? "tiktok_ad" : (q.get("gclid") || q.get("gbraid") || q.get("wbraid")) ? "google_ad"
-    : q.get("fbclid") ? "facebook" : "")).slice(0, 20);
+    : q.get("fbclid") ? "facebook" : q.get("oppref") ? "chatgpt_ad" : "")).slice(0, 20);
   function send(event) {
     var body = JSON.stringify({ app: app, event: event, platform: platform, browser: browser, source: source });
     try { if (navigator.sendBeacon(url, new Blob([body], { type: "text/plain" }))) return; } catch (e) {}
@@ -73,6 +73,10 @@ border-radius:12px;font-size:1.5rem;font-weight:800;letter-spacing:.06em">FOUNDE
   if (play) {
     var ref = (q.get("ref") || "").toUpperCase();
     var referrer = "utm_source=" + (source || "site") + "&utm_medium=web";
+    // ChatGPT ads add ?oppref= to the link: hand it to the app, whose server
+    // sends it back with the sign-up so OpenAI can credit the ad click.
+    var oppref = q.get("oppref");
+    if (oppref && oppref.length < 300) referrer += "&oppref=" + encodeURIComponent(oppref);
     if (/^[A-HJ-KM-NP-Z2-9]{7}$/.test(ref)) {
       referrer += "&ref=" + ref;
       var box = document.getElementById("ref-box");
