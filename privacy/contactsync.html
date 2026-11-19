@@ -14,6 +14,7 @@
     <li><strong>Your links</strong> (optional): Instagram, TikTok, Facebook or X usernames and one website you choose to add. Shown only to the people you sync with. Remove them any time in Edit profile.</li>
     <li><strong>Invites</strong>: your invite code, who invited you (if anyone), and the free months earned when people you invited subscribe. The person who invited you sees only how many people joined and subscribed, never who you are.</li>
     <li><strong>One-time benefits</strong>: so the free month, promo codes and invite codes can't be claimed again by deleting and recreating an account, we keep a <strong>scrambled one-way code</strong> made from your phone number (not the number itself) with a note of which of these it has used.</li>
+    <li><strong>Phone ID</strong> (Android): a scrambled one-way code (a SHA-256 hash) made from the ID Android gives ContactSync on your phone, so that if an account is banned, the phone it was used on can't be used for a new account. It isn't your advertising ID and can't be turned back into the phone's ID. Private, never shared, and deleted with your account unless that account was banned.</li>
     <li><strong>Sign-in requests</strong>: the phone number and time each sign-in code was requested, to stop abuse.</li>
     <li><strong>Where you installed from</strong>: once per account, Google Play's note of the link or ad that led to the install (for example a campaign name), so we can tell which ads bring members. It doesn't identify you; if it holds the ad's click reference, that reference goes back to the ad platform (see below).</li>
     <li><strong>Days you open the app</strong>: the date (no time) and whether it was Android or iPhone, so we know how many people use ContactSync each week. Nothing about what you do in the app. Private, and deleted with your account.</li>
@@ -41,13 +42,13 @@
   <p>We <strong>never sell</strong> your data. Apart from the ad measurement above, we don't share it for advertising. The app shows no ads and uses no advertising identifiers.</p>
 
   <h2>Keeping the community safe</h2>
-  <p>You can block or report anyone. When three different members who were synced with the same person have each blocked and reported them, that number is banned and can't sign up again. A child-safety report from someone synced with them suspends the account at once until we review it. We keep banned numbers for that reason.</p>
+  <p>You can block or report anyone. When three different members who were synced with the same person have each blocked and reported them, that number is banned and can't sign up again. A ban also covers the phone the account was used on. A child-safety report from someone synced with them suspends the account at once until we review it. We keep banned numbers for that reason.</p>
 
   <h2>How long we keep data</h2>
   <ul>
     <li>Your account, profile, tags, About you details, circles, connections, blocks and reports: until you delete your account. You can clear any About you detail at any time in the app.</li>
     <li>If your access ends, your connections stay for 7 days, then the contacts ContactSync added are removed. Your profile stays so you can come back, until you delete your account.</li>
-    <li>Banned numbers: kept so the same number can't sign up again.</li>
+    <li>Banned numbers, and the scrambled code of the phones they were used on: kept so the same number or phone can't sign up again.</li>
     <li>Crash reports: 90 days, at Google Firebase.</li>
     <li>The scrambled one-way code of your number and which one-time benefits it used: kept after you delete your account, for up to 2 years after its last use, to prevent abuse of the free month and codes.</li>
   </ul>
