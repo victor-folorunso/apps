@@ -73,6 +73,20 @@
       "inapp_tip": true,
       "guided_steps": true,
       "after_install": "Open Handharbor and sign in with one of the sample accounts: client, broker or reviewer."
+    },
+    {
+      "id": "odd1out",
+      "name": "Odd One Out",
+      "package": "com.wonderperk.odd1out",
+      "status": "testing",
+      "tagline": "Three match. One doesn't. Spot it.",
+      "about": "A picture puzzle game: four pictures, three share something, tap the odd one out. 30 levels, stars to earn, daily goals. No timer, no ads, no account.",
+      "icon": "odd1out/icon.png",
+      "accent": "#FFD23F",
+      "privacy": "privacy/odd1out.html",
+      "privacy_updated": "19 November 2026",
+      "wait_tip": true,
+      "inapp_tip": true
     }
   ]
 }
