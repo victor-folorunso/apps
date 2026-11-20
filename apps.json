@@ -87,6 +87,8 @@
       "privacy_updated": "19 November 2026",
       "terms": "terms/odd1out.html",
       "terms_updated": "19 November 2026",
+      "guided_steps": true,
+      "after_install": "Open Odd One Out and play the first level. No sign-up needed.",
       "wait_tip": true,
       "inapp_tip": true
     }
