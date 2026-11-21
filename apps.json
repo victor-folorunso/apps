@@ -43,7 +43,9 @@
       },
       "delete_account_updated": "22 October 2026",
       "guided_steps": true,
-      "after_install": "Open ContactSync and sign in with your WhatsApp number. Then claim your bonus: Profile > Subscription > Have a code?"
+      "after_install": "Open ContactSync and sign in with your WhatsApp number. Then claim your bonus: Profile > Subscription > Have a code?",
+      "support": "support/contactsync.html",
+      "support_updated": "21 November 2026"
     },
     {
       "id": "bitnook",

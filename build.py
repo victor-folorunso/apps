@@ -445,6 +445,7 @@ EXTRA_PAGES = {
     "terms": ("terms", "Terms of service", "Terms of Service"),
     "delete_account": ("delete-account", "Delete your account", "Delete your account"),
     "child_safety": ("child-safety", "Child safety", "Child Safety Standards"),
+    "support": ("support", "Help and support", "Help and support"),
 }
 
 
