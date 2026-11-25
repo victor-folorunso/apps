@@ -53,16 +53,18 @@
       "package": "com.wonderperk.handharbor",
       "status": "testing",
       "tagline": "One broker. Your whole project.",
-      "about": "Hire one vetted project broker who builds the team, manages the work and delivers it. Brokers are checked by hand: their freelance profiles, and their ID on a video call. This test version runs on sample data.",
+      "about": "A free directory of digital project brokers we check by hand: their face, their intro video, their freelance profiles and their ID on a video call, rechecked every 30 days. Message one, or hire them on their Upwork, Fiverr or LinkedIn. Handharbor never handles project money.",
       "icon": "handharbor/icon.png",
       "accent": "#f2b544",
       "privacy": "privacy/handharbor.html",
-      "privacy_updated": "4 November 2026",
+      "privacy_updated": "25 November 2026",
+      "terms": "terms/handharbor.html",
+      "terms_updated": "25 November 2026",
       "delete_account": "delete-account/handharbor.html",
-      "delete_account_updated": "4 November 2026",
+      "delete_account_updated": "25 November 2026",
       "inapp_tip": true,
       "guided_steps": true,
-      "after_install": "Open Handharbor and sign in with one of the sample accounts: client, broker or reviewer."
+      "after_install": "Open Handharbor and browse the register. To list yourself, tap Account, then Get verified."
     },
     {
       "id": "odd1out",
