@@ -48,18 +48,6 @@
       "support_updated": "21 November 2026"
     },
     {
-      "id": "bitnook",
-      "name": "Bitnook",
-      "package": "com.wonderperk.bitnook",
-      "status": "testing",
-      "tagline": "Small games, instantly.",
-      "about": "A shelf of tiny web games that live on your phone, and a way to hand one to a friend. No account, no server, no feed — a game is a single HTML file that runs sealed off, with no network of its own. Pass one the way you'd pass a photo.",
-      "icon": "bitnook/icon.png",
-      "accent": "#ffa94d",
-      "privacy": "privacy/bitnook.html",
-      "privacy_updated": "8 October 2026"
-    },
-    {
       "id": "handharbor",
       "name": "Handharbor",
       "package": "com.wonderperk.handharbor",
