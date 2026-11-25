@@ -228,7 +228,8 @@ GUIDED_SCRIPT = """
 (function () {
   var WAIT = 5 * 60 * 1000, KEY = "wp-steps-%(id)s";
   var ua = navigator.userAgent || "";
-  if (/iphone|ipad|ipod/i.test(ua)) document.getElementById("ios-note").style.display = "block";
+  var iosNote = document.getElementById("ios-note");
+  if (iosNote && /iphone|ipad|ipod/i.test(ua)) iosNote.style.display = "block";
   var load = function () { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
   var save = function (s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} };
   var st = load();
@@ -318,15 +319,27 @@ GUIDED_SCRIPT = """
 </script>"""
 
 
+def app_store_box(app, name):
+    """iPhone route for an app that is live on the App Store: a button for
+    everyone (the page is also Android's tester page)."""
+    if not app.get("app_store"):
+        return ""
+    track = ' data-track="app_store"' if app.get("track_url") else ""
+    return f"""<div class="short" style="margin:12px 0;border-color:var(--accent)">&#63743; <b>On iPhone?</b>
+{name} is on the App Store.
+<a class="button" href="{html.escape(app['app_store'])}"{track}>Get it on the App Store</a></div>"""
+
+
 def guided_steps(app, name, group, test, link):
     track = bool(app.get("track_url"))
     t = lambda event: f' data-track="{event}"' if track else ""
     after = html.escape(app.get("after_install", f"Open {app['name']} and sign in."))
+    ios = app_store_box(app, name) or f"""<div id="ios-note" class="short" style="display:none;border-color:var(--accent)">&#128241; <b>{name} is
+Android only for now.</b> Open this page on an Android phone to join.</div>"""
     return f"""
 <style>{GUIDED_STYLE}</style>
-<div id="ios-note" class="short" style="display:none;border-color:var(--accent)">&#128241; <b>{name} is
-Android only for now.</b> Open this page on an Android phone to join.</div>
-<div class="flow-head">Get it in 4 steps</div>
+{ios}
+<div class="flow-head">{"On Android: get it in 4 steps" if app.get("app_store") else "Get it in 4 steps"}</div>
 <div class="dim">About 10 minutes, on your Android phone.</div>
 
 <div class="gstep" id="g1" data-state="now"><div class="num">1</div><div class="gbody">
@@ -421,7 +434,7 @@ public release.</p>"""
 {INAPP_TIP.replace('%LINK%', SITE.split('//')[1] + app['id']) + chr(10) if app.get('inapp_tip') else ''}<div class="hero"><img src="icon.png" alt="">
 <div><h1>{name}</h1><div class="dim">{html.escape(app['tagline'])}</div></div></div>
 <p>{html.escape(app['about'])}</p>
-{promo_box(app['promo']) + chr(10) if app.get('promo') else ''}{how}
+{promo_box(app['promo']) + chr(10) if app.get('promo') else ''}{app_store_box(app, name)}{how}
 <h2>More</h2>
 <p><a href="privacy/">Privacy policy</a>{extra_links(app)} &middot; Contact: <a href="mailto:{data['contact']}">{data['contact']}</a></p>"""
     if app.get("track_url"):
@@ -472,6 +485,8 @@ def index_page(data):
     cards = []
     for app in data["apps"]:
         badge = "Testing" if app["status"] == "testing" else "On Google Play"
+        if app.get("app_store"):
+            badge = "On the App Store" if app["status"] == "testing" else "Google Play and App Store"
         cards.append(f"""<a class="tile" href="{app['id']}/" style="--tile-accent:{app.get('accent', '#e0a36a')}">
 <div class="tile-media icon"><img src="{app['icon']}" alt=""></div>
 <div class="tile-body"><div class="tile-title"><b>{html.escape(app['name'])}</b><span class="badge">{badge}</span></div>

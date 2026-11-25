@@ -15,7 +15,9 @@
       "privacy": "privacy/linking.html",
       "privacy_updated": "23 November 2026",
       "inapp_tip": true,
-      "wait_tip": true
+      "guided_steps": true,
+      "after_install": "Open LINKING and play. Please keep it installed for two weeks: Google counts testers before the public release.",
+      "app_store": "https://apps.apple.com/app/id6836969551"
     },
     {
       "id": "contactsync",
