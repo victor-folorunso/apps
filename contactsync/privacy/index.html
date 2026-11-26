@@ -37,14 +37,14 @@ footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
 </head>
 <body><main>
 <h1>ContactSync: Privacy Policy</h1>
-<p class="dim">Last updated 24 November 2026</p>
+<p class="dim">Last updated 26 November 2026</p>
 <p>ContactSync is an app made by <strong>wonderperk</strong> ("we"). It connects you with the kinds of people you choose (your "circles") and adds you to each other's phone contacts. This policy explains what we do with information about you.</p>
 
   <div class="short">The short version: <strong>the people you sync with get your phone number, username, photo, bio, tags, your country and region and what you're here to do. That is the service, and it always works both ways.</strong> Your phone's address book never leaves your phone. We never sell your data or use it for ads.</div>
 
   <h2>What we collect</h2>
   <ul>
-    <li><strong>Your phone number</strong>: your account and how you sign in. We confirm it by sending a code to your WhatsApp. It is shared with the people you sync with.</li>
+    <li><strong>Your phone number</strong>: your account and how you sign in. We confirm it by sending a code by text message or, if that doesn't arrive, on WhatsApp. It is shared with the people you sync with.</li>
     <li><strong>Your profile</strong>: username, and optionally a photo and a short bio. Shared with the people you sync with.</li>
     <li><strong>Your tags</strong>: used to match you. The people you sync with can see your tags.</li>
     <li><strong>Reviews</strong>: stars and a short comment you leave about someone you sync with. They are shown with your username to that member and to the people they sync with, until you delete them. Reviews from banned members are hidden. Reviews stay when an account is deleted: a deleted reviewer's reviews show as "Former member", and reviews about a deleted member are kept with a scrambled one-way code made from their number (not the number itself), so they come back if that number signs up again. A review is deleted once neither side is a member.</li>
@@ -62,6 +62,7 @@ footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
     <li><strong>Your settings</strong>: your notification and reminder choices, the say-hi messages you write, and the names you give the people you sync with. Saved to your account so they follow you to a new phone. Private to you.</li>
     <li><strong>Notification token</strong>: if you allow notifications, a code from Google that lets us send notifications to your phone (for example when someone new syncs with you) and wake ContactSync up to save their number. Deleted when you sign out or delete your account.</li>
     <li><strong>Contacts access</strong>: whether ContactSync can currently use your contacts, and since when it can't. Syncing pauses for people who turn it off, so the people they sync with aren't left with unsaved numbers.</li>
+    <li><strong>ID check</strong> (optional): if you choose to verify your ID for the blue tick, our partner Didit takes a photo of your ID document and a short selfie video, checks the document is real, that you're a live person and that your face matches the photo, and looks at your internet (IP) address to spot fraud. <strong>We never see or keep your ID or selfie.</strong> We keep only the result (verified or not), the check's reference number and its dates. The people you sync with see only the blue tick, and other members' circles can be set to verified members only.</li>
     <li><strong>Crash reports</strong>: if the app crashes or a screen fails, the error, the steps in our code that led to it, your phone model and Android version, and the app version, so we can fix it. They never include your name, number, contacts or messages. You can turn this off in Settings, Notifications, Send crash reports.</li>
   </ul>
   <p><strong>Our web page</strong> (the ContactSync tester page) counts visits and taps on its buttons, with only the kind of device (Android, iPhone or other), whether it was opened inside TikTok, Instagram or Facebook, and which link it came from. No cookies, IP addresses or anything that identifies you are stored.</p>
@@ -76,7 +77,7 @@ footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
   <h2>Who we share with</h2>
   <ul>
     <li><strong>The people you sync with</strong> see your phone number, username, photo, bio and tags, any links you added, your country, region and what you're here to do, and your gender and age if you chose to show them. They don't see your circles or your birth year.</li>
-    <li><strong>Service providers</strong> that run parts of the app for us: Supabase (hosting and database, in the EU, Ireland) and Sendchamp (delivers sign-in codes on WhatsApp; the message may show "Flutterwave" as the sender), and Google Firebase (delivers sign-in codes by text message and notifications, and receives crash reports, which it keeps for 90 days), and Google Cloud Vision (checks each new profile photo for sexual or suggestive content; Google doesn't keep the photo). A photo that fails the check is deleted, and we keep only a note of the result. Google Play and Apple handle subscriptions.</li>
+    <li><strong>Service providers</strong> that run parts of the app for us: Supabase (hosting and database, in the EU, Ireland) and Sendchamp (delivers sign-in codes on WhatsApp; the message may show "Flutterwave" as the sender), and Google Firebase (delivers sign-in codes by text message and notifications, and receives crash reports, which it keeps for 90 days), and Didit (runs the optional ID check; it uses your ID and selfie only to do the check, and keeps them as described below), and Google Cloud Vision (checks each new profile photo for sexual or suggestive content; Google doesn't keep the photo). A photo that fails the check is deleted, and we keep only a note of the result. Google Play and Apple handle subscriptions.</li>
     <li><strong>OpenAI (ChatGPT ads), to measure our ads</strong>: when you finish signing up, start your free month or first subscribe, we tell OpenAI that this happened, with one-way scrambled codes (SHA-256 hashes) made from your phone number and your ContactSync member number, your phone's internet (IP) address and app version details at that moment, and, if you came from one of our ads, the ad's click reference. OpenAI uses it to count which ads led to sign-ups; it can't turn the codes back into your number, and it says it doesn't use this data to personalise anything for you. Nothing else (no name, contacts or profile) is sent. On iPhone this happens only if you allow tracking when the app asks; you can change it any time in Settings, Privacy &amp; Security, Tracking.</li>
     <li><strong>Google (Firebase Analytics and Google Ads), to measure our ads</strong> (Android): the app tells Google Analytics when it was first opened and when you finish signing up, with your phone's advertising ID and an app-install ID, so Google Ads can count which of our ads led to real sign-ups. No name, number, contacts or profile is sent. You can reset or delete your advertising ID in your phone's settings (Settings, Google, Ads).</li>
     <li><strong>Authorities</strong>, only when the law requires it.</li>
@@ -92,11 +93,12 @@ footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
     <li>If your access ends, your connections stay for 7 days, then the contacts ContactSync added are removed. Your profile stays so you can come back, until you delete your account.</li>
     <li>Banned numbers, and the scrambled code of the phones they were used on: kept so the same number or phone can't sign up again.</li>
     <li>Crash reports: 90 days, at Google Firebase.</li>
+    <li>ID check: the result stays with your account until you delete it. Didit keeps the ID photo, selfie and check details for up to 1 year, and we ask Didit to erase them when you delete your account.</li>
     <li>The scrambled one-way code of your number and which one-time benefits it used: kept after you delete your account, for up to 2 years after its last use, to prevent abuse of the free month and codes.</li>
   </ul>
 
   <h2>Deleting your account</h2>
-  <p>In the app: <strong>Profile &gt; Delete account</strong>. This deletes your profile, photo, tags, About you details, circles, connections, blocks and reports straight away, and your number is removed from other members' phones on their next sync (unless they edited or kept your contact). Can't open the app? See <a href="../delete-account/">how to delete your account</a>.</p>
+  <p>In the app: <strong>Profile &gt; Delete account</strong>. This deletes your profile, photo, tags, ID check result (and asks Didit to erase your ID check), About you details, circles, connections, blocks and reports straight away, and your number is removed from other members' phones on their next sync (unless they edited or kept your contact). Can't open the app? See <a href="../delete-account/">how to delete your account</a>.</p>
 
   <h2>Your rights</h2>
   <p>Wherever you live, you can ask us to access, correct or delete your data, object to processing, withdraw your consent and get a copy of your data. Email us and we'll reply within 30 days. In Nigeria these rights come from the Nigeria Data Protection Act 2023, and you can also complain to the Nigeria Data Protection Commission (<a href="https://ndpc.gov.ng">ndpc.gov.ng</a>).</p>
