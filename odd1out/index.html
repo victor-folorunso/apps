@@ -39,7 +39,7 @@ footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
 
 <div class="hero" style="margin:0 0 12px;gap:16px"><img src="icon.png" alt="" style="width:72px;height:72px;border-radius:18px">
 <div><h1 style="font-size:1.7rem">Odd One Out</h1><div class="dim">Three match. One doesn&#x27;t. Spot it.</div></div></div>
-<p style="margin:0">A picture puzzle game: four pictures, three share something, tap the odd one out. 30 levels, stars to earn, daily goals. No timer, no account.</p>
+<p style="margin:0">A picture puzzle game: four pictures, three share something, tap the odd one out. Hundreds of tricky levels, stars to earn, daily goals. No timer, no account.</p>
 
 <style>
 .flow-head { font-size:1.35rem; font-weight:800; margin:28px 0 2px; }
@@ -70,9 +70,10 @@ footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
 .inapp-help .button { flex:1; margin-top:0; padding:10px; font-size:.95rem; }
 .inapp-help.detected { color:var(--text); border-left:3px solid var(--accent); padding-left:10px; }
 </style>
-<div id="ios-note" class="short" style="display:none;border-color:var(--accent)">&#128241; <b>Odd One Out is
-Android only for now.</b> Open this page on an Android phone to join.</div>
-<div class="flow-head">Get it in 4 steps</div>
+<div class="short" style="margin:12px 0;border-color:var(--accent)">&#63743; <b>On iPhone?</b>
+Odd One Out is on the App Store.
+<a class="button" href="https://apps.apple.com/app/id6837359227">Get it on the App Store</a></div>
+<div class="flow-head">On Android: get it in 4 steps</div>
 <div class="dim">About 10 minutes, on your Android phone.</div>
 
 <div class="gstep" id="g1" data-state="now"><div class="num">1</div><div class="gbody">
@@ -117,7 +118,8 @@ installed for two weeks: Google counts testers before the public release.</p>
 (function () {
   var WAIT = 5 * 60 * 1000, KEY = "wp-steps-odd1out";
   var ua = navigator.userAgent || "";
-  if (/iphone|ipad|ipod/i.test(ua)) document.getElementById("ios-note").style.display = "block";
+  var iosNote = document.getElementById("ios-note");
+  if (iosNote && /iphone|ipad|ipod/i.test(ua)) iosNote.style.display = "block";
   var load = function () { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
   var save = function (s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} };
   var st = load();
