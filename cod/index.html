@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COD by wonderperk</title>
+<meta name="description" content="A concept project: buy solar, inverters and appliances together in Nigeria, pay less, and pay on delivery.">
+<style>
+:root { --bg:#0f1115; --panel:#181b21; --line:#2a2e36; --text:#ece6da; --dim:#a8a192; --accent:#3dbe8b; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text);
+       font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+main { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
+a { color:var(--accent); }
+h1 { font-size:2rem; margin:0 0 4px; letter-spacing:.02em; }
+h2 { font-size:1.1rem; margin:32px 0 8px; color:var(--accent); }
+.dim { color:var(--dim); }
+.badge { display:inline-block; font-size:.75rem; padding:2px 8px; border-radius:99px;
+         border:1px solid var(--line); color:var(--dim); margin-left:6px; vertical-align:middle; }
+.hero { display:flex; gap:20px; align-items:center; margin:8px 0 24px; }
+.hero img { width:96px; height:96px; border-radius:22px; }
+.reel { display:block; width:100%; max-width:360px; margin:24px auto; aspect-ratio:1/2;
+        background:#000; border:1px solid var(--line); border-radius:28px; }
+ul { padding-left:1.2em; }
+li { margin:4px 0; }
+footer { margin-top:48px; font-size:.9rem; color:var(--dim); }
+</style>
+</head>
+<body><main>
+
+<div class="hero"><img src="icon.png" alt="">
+<div><h1>COD <span class="badge">Concept project</span></h1><div class="dim">Buy together, pay less.</div></div></div>
+
+<p>Group buying for big-ticket items in Nigeria: solar systems, inverters,
+batteries, air conditioners. Buyers join a two-week batch for free, the price
+drops as more people join, and everyone pays the seller on delivery. The app
+never touches the money.</p>
+
+<video class="reel" src="showcase.mp4" poster="poster.jpg" controls playsinline preload="metadata"></video>
+<p class="dim" style="text-align:center">Recorded from the app: batches, a batch's price steps, filters, installers, and switching to the seller side.</p>
+
+<h2>How it works</h2>
+<ul>
+  <li>Each batch has a price ladder: every step needs more buyers and unlocks a
+      lower price. Everyone pays the lowest price the batch reaches.</li>
+  <li>Joining is free. You can leave until 48 hours before the batch closes; if
+      it falls short, nobody pays anything.</li>
+  <li>Payment is cash or transfer to the seller on delivery, once the item
+      arrives as described. Problems can be reported from the order.</li>
+  <li>Optional installation by a vetted local installer, paid to them once it works.</li>
+  <li>One account, three sides: buyer, seller or installer. A switch on the
+      Account tab shows only the side in use.</li>
+  <li>Sellers can link their store, but only on Jumia, Konga or Amazon, so
+      buyers are never sent to an unknown website. The database enforces the
+      same list.</li>
+</ul>
+
+<h2>Built with</h2>
+<p>React Native (Expo SDK 58) on Android and iPhone, with Firebase for sign-in and
+data. There is no server code: the database's security rules are the server,
+allowing only the moves the app's rules allow (join, leave, ship, confirm),
+and a live test checks them.</p>
+
+<h2>Status</h2>
+<p>COD was built and tested in 2026 and parked before release. A group-buying
+app lives or dies on filling batches in one city at a time, which is a
+marketing problem more than a software one.</p>
+
+<footer><a href="../">All apps</a> &middot; &copy; wonderperk</footer>
+</main></body>
+</html>
